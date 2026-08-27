@@ -16,6 +16,12 @@ window.addEventListener('load', () => {
     }, 1200);
 });
 
+// Extra safety: also remove preloader after 5 seconds if load event hasn't fired
+setTimeout(() => {
+    const preloader = document.getElementById('preloader');
+    if (preloader) preloader.classList.add('hidden');
+}, 5000);
+
 // 3. Mobile Menu
 const menuToggle = document.getElementById('menu-toggle');
 const navLinks = document.getElementById('nav-links');
@@ -74,6 +80,8 @@ const mpesaAmount = document.querySelector('.mpesa-amount');
 const mpesaClose = document.getElementById('mpesa-close');
 const mpesaCancel = document.getElementById('mpesa-cancel');
 
+let mpesaTimeout; // To store the timeout ID for cleanup
+
 function triggerMpesaPayment(amount) {
     mpesaOverlay.classList.add('active');
     mpesaLoader.classList.remove('hidden');
@@ -81,7 +89,7 @@ function triggerMpesaPayment(amount) {
     mpesaError.classList.add('hidden');
     if (mpesaAmount) mpesaAmount.textContent = `KES ${amount.toLocaleString()}.00`;
 
-    setTimeout(() => {
+    mpesaTimeout = setTimeout(() => {
         mpesaLoader.classList.add('hidden');
         mpesaSuccess.classList.remove('hidden');
         setTimeout(() => {
@@ -99,8 +107,12 @@ document.getElementById('final-whatsapp-btn').addEventListener('click', () => {
     window.open('https://wa.me/254702555093?text=Hi!%20I%20want%20to%20order%20a%20cake.', '_blank');
 });
 
-if (mpesaClose) mpesaClose.addEventListener('click', () => mpesaOverlay.classList.remove('active'));
+if (mpesaClose) mpesaClose.addEventListener('click', () => {
+    mpesaOverlay.classList.remove('active');
+    clearTimeout(mpesaTimeout); // Prevent late success if modal closed
+});
 if (mpesaCancel) mpesaCancel.addEventListener('click', () => {
+    clearTimeout(mpesaTimeout);
     mpesaLoader.classList.add('hidden');
     mpesaSuccess.classList.add('hidden');
     mpesaError.classList.remove('hidden');
@@ -122,7 +134,23 @@ function updateBundleTotal() {
     currentBundlePrice = total;
     bundleTotalEl.textContent = `KES ${total.toLocaleString()}`;
 }
-bundleItems.forEach(item => item.addEventListener('click', () => { item.classList.toggle('selected'); updateBundleTotal(); }));
+
+bundleItems.forEach(item => {
+    item.addEventListener('click', () => {
+        item.classList.toggle('selected');
+        updateBundleTotal();
+        // Update aria-pressed for accessibility
+        item.setAttribute('aria-pressed', item.classList.contains('selected'));
+    });
+    // Keyboard support (Enter/Space)
+    item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            item.click();
+        }
+    });
+});
+
 if (bundleOrderBtn) bundleOrderBtn.addEventListener('click', () => triggerMpesaPayment(currentBundlePrice));
 updateBundleTotal();
 
@@ -131,15 +159,42 @@ const builderInputs = document.querySelectorAll('input[type="radio"]');
 const builderTotalEl = document.getElementById('builder-total');
 const builderCheckoutBtn = document.getElementById('builder-checkout-btn');
 
+function updateRadioCardClasses() {
+    // Toggle .selected class on parent .radio-card for compatibility
+    builderInputs.forEach(input => {
+        const card = input.closest('.radio-card');
+        if (input.checked) {
+            card.classList.add('selected');
+        } else {
+            card.classList.remove('selected');
+        }
+    });
+}
+
 function calculateBuilderTotal() {
     let total = 0;
     builderInputs.forEach(input => { if (input.checked) total += parseInt(input.value); });
     builderTotalEl.textContent = `KES ${total.toLocaleString()}`;
     builderCheckoutBtn.dataset.amount = total;
 }
-builderInputs.forEach(input => input.addEventListener('change', calculateBuilderTotal));
+
+builderInputs.forEach(input => {
+    input.addEventListener('change', () => {
+        calculateBuilderTotal();
+        updateRadioCardClasses();
+    });
+});
+
+// Initial setup
 calculateBuilderTotal();
-if (builderCheckoutBtn) builderCheckoutBtn.addEventListener('click', (e) => { e.preventDefault(); triggerMpesaPayment(parseInt(this.dataset.amount)); });
+updateRadioCardClasses();
+
+if (builderCheckoutBtn) {
+    builderCheckoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        triggerMpesaPayment(parseInt(builderCheckoutBtn.dataset.amount));
+    });
+}
 
 // 11. FOMO Toasts
 const purchaseToastContainer = document.getElementById('purchase-toast-container');
@@ -152,11 +207,16 @@ const livePurchases = [
 ];
 function showPurchaseToast() {
     const random = livePurchases[Math.floor(Math.random() * livePurchases.length)];
-    const toast = document.createElement('div'); toast.className = 'purchase-toast';
-    const mins = Math.floor(Math.random() * 10) + 1; const time = mins === 1 ? "Just now" : `${mins} mins ago`;
-    toast.innerHTML = `<div class="toast-icon">✓</div><div class="toast-content"><p><strong>${random.name}</strong> from ${random.location} just ordered <strong>${random.product}</strong></p><span class="toast-time">${time} • Verified M-Pesa</span></div><button class="toast-close">×</button>`;
+    const toast = document.createElement('div');
+    toast.className = 'purchase-toast';
+    const mins = Math.floor(Math.random() * 10) + 1;
+    const time = mins === 1 ? "Just now" : `${mins} mins ago`;
+    toast.innerHTML = `<div class="toast-icon">✓</div><div class="toast-content"><p><strong>${random.name}</strong> from ${random.location} just ordered <strong>${random.product}</strong></p><span class="toast-time">${time} • Verified M-Pesa</span></div><button type="button" class="toast-close">×</button>`;
     purchaseToastContainer.appendChild(toast);
-    setTimeout(() => { if (toast.parentNode) toast.remove(); }, 6000);
+    // Remove after 6 seconds
+    setTimeout(() => {
+        if (toast.parentNode) toast.remove();
+    }, 6000);
     toast.querySelector('.toast-close').addEventListener('click', () => toast.remove());
 }
 setTimeout(showPurchaseToast, 4000);
@@ -176,26 +236,41 @@ const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const today = new Date();
 for (let i = 1; i <= 7; i++) {
-    const nextDate = new Date(today); nextDate.setDate(today.getDate() + i);
+    const nextDate = new Date(today);
+    nextDate.setDate(today.getDate() + i);
     const dateStr = `${days[nextDate.getDay()]} ${nextDate.getDate()} ${months[nextDate.getMonth()]}`;
-    const btn = document.createElement('button'); btn.className = 'date-slot'; btn.innerText = dateStr;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'date-slot';
+    btn.innerText = dateStr;
     btn.addEventListener('click', () => {
         document.querySelectorAll('.date-slot').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected'); selectedDate = dateStr; tastingError.classList.remove('visible');
+        btn.classList.add('selected');
+        selectedDate = dateStr;
+        tastingError.classList.remove('visible');
     });
     dateGrid.appendChild(btn);
 }
+
 timeGrid.querySelectorAll('.time-slot').forEach(slot => {
     slot.addEventListener('click', () => {
         timeGrid.querySelectorAll('.time-slot').forEach(b => b.classList.remove('selected'));
-        slot.classList.add('selected'); selectedTime = slot.dataset.time; tastingError.classList.remove('visible');
+        slot.classList.add('selected');
+        selectedTime = slot.dataset.time;
+        tastingError.classList.remove('visible');
     });
 });
+
 openTastingBtn.addEventListener('click', () => tastingOverlay.classList.add('active'));
 closeTastingBtn.addEventListener('click', () => tastingOverlay.classList.remove('active'));
-tastingOverlay.addEventListener('click', (e) => { if (e.target === tastingOverlay) tastingOverlay.classList.remove('active'); });
+tastingOverlay.addEventListener('click', (e) => {
+    if (e.target === tastingOverlay) tastingOverlay.classList.remove('active');
+});
 confirmTastingBtn.addEventListener('click', () => {
-    if (!selectedDate || !selectedTime) { tastingError.classList.add('visible'); return; }
+    if (!selectedDate || !selectedTime) {
+        tastingError.classList.add('visible');
+        return;
+    }
     const message = `Hi Prism & Pastry! I'd like to book a FREE tasting session at your Imara Daima studio on ${selectedDate} at ${selectedTime}. Is this slot available?`;
     window.open(`https://wa.me/254702555093?text=${encodeURIComponent(message)}`, '_blank');
     tastingOverlay.classList.remove('active');
@@ -209,23 +284,47 @@ const lightboxCaption = document.getElementById('lightbox-caption');
 const lightboxClose = document.getElementById('lightbox-close');
 const lightboxPrev = document.getElementById('lightbox-prev');
 const lightboxNext = document.getElementById('lightbox-next');
-let currentIndex = 0; const imageArray = Array.from(galleryItems);
+let currentIndex = 0;
+const imageArray = Array.from(galleryItems);
 
 function updateLightbox() {
     const item = imageArray[currentIndex];
-    lightboxImg.src = item.dataset.full; lightboxCaption.textContent = item.dataset.caption;
+    lightboxImg.src = item.dataset.full;
+    lightboxCaption.textContent = item.dataset.caption;
 }
+
 galleryItems.forEach((item, index) => {
+    // Click handler
     item.addEventListener('click', () => {
-        currentIndex = index; updateLightbox();
-        lightbox.classList.add('active'); document.body.style.overflow = 'hidden';
+        currentIndex = index;
+        updateLightbox();
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+    // Keyboard support (Enter/Space)
+    item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            item.click();
+        }
     });
 });
-function closeLightbox() { lightbox.classList.remove('active'); document.body.style.overflow = 'auto'; }
+
+function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
 lightboxClose.addEventListener('click', closeLightbox);
 lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
-lightboxPrev.addEventListener('click', () => { currentIndex = (currentIndex - 1 + imageArray.length) % imageArray.length; updateLightbox(); });
-lightboxNext.addEventListener('click', () => { currentIndex = (currentIndex + 1) % imageArray.length; updateLightbox(); });
+lightboxPrev.addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + imageArray.length) % imageArray.length;
+    updateLightbox();
+});
+lightboxNext.addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % imageArray.length;
+    updateLightbox();
+});
 document.addEventListener('keydown', (e) => {
     if (!lightbox.classList.contains('active')) return;
     if (e.key === 'Escape') closeLightbox();
