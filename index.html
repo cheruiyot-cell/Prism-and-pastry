@@ -54,17 +54,16 @@
     <!-- CSS & AOS Library -->
     <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">  <!-- FIXED: was styles.css -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- 1. Branded Preloader -->
+    <!-- Branded Preloader -->
     <div id="preloader">
         <div class="preloader-logo">Prism <span>&</span> Pastry</div>
         <div class="preloader-sub">Nairobi's Boldest Cake House</div>
         <div class="preloader-loader"><div class="preloader-geo"></div></div>
     </div>
-    <!-- Fallback to remove preloader if JS fails -->
     <script>
         setTimeout(function() {
             var p = document.getElementById('preloader');
@@ -83,7 +82,6 @@
                 <li><a href="#visit">Visit Us</a></li>
                 <li><a href="#faqs">FAQs</a></li>
             </ul>
-            <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
             <a href="https://wa.me/254702555093?text=Hi%20Prism%20%26%20Pastry!%20I%20just%20saw%20your%20website%20and%20I'd%20like%20to%20make%20an%20enquiry%20about%20a%20cake." class="cta-btn whatsapp-btn">Order on WhatsApp</a>
         </nav>
     </header>
@@ -93,13 +91,13 @@
         <section class="hero">
             <div class="hero-content">
                 <p class="eyebrow">Geometric cakes, baked in Imara Daima.</p>
-                <h1>Bold cakes that actually taste good. Delivered on time.</h1>
-                <p class="subhead">We're tired of pretty, dry cakes and bakers who ghost you. From our cake house in Imara Daima, we bake fresh in small batches and deliver across Nairobi, Kiambu, and Machakos. Prices start at KES 3,000.</p>
+                <h1>Bold, beautiful cakes that actually taste like heaven – delivered on time, every time.</h1>
+                <p class="subhead">Tired of cakes that look amazing but taste like cardboard? Or bakers who vanish after you pay?<br>We're Prism & Pastry – a Nairobi cake house in Imara Daima. We bake fresh in small batches, use real butter and quality ingredients, and deliver <strong>on the dot</strong> across Nairobi, Kiambu, and Machakos. Prices start at <strong>KES 3,000</strong>. No hidden fees, no excuses.</p>
                 <div class="hero-ctas">
                     <button type="button" id="mpesa-trigger" class="cta-btn primary">Pay with M-Pesa</button>
                     <a href="#collection" class="cta-btn secondary">See What's Baking Today</a>
                 </div>
-                <p class="micro-trust">Real humans, 15-minute average WhatsApp reply. On-time guarantee.</p>
+                <p class="micro-trust">✅ Real humans, 15-minute average WhatsApp reply.<br>✅ On-time guarantee – or 10% off your next order.<br>✅ 200+ happy customers in Nairobi, Kiambu & Machakos.</p>
             </div>
             <div class="hero-image">
                 <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1200&auto=format&fit=crop" alt="Vibrant chocolate drip cake with berries" loading="lazy" />
@@ -109,8 +107,8 @@
         <!-- Trust Bar -->
         <section class="trust-bar" data-aos="fade-up" data-aos-delay="100">
             <div class="trust-item"><h3>Real Taste Guarantee</h3><p>No dry cardboard cakes!</p></div>
-            <div class="trust-item"><h3>On-Time Promise</h3><p>Nairobi, Kiambu & Machakos</p></div>
-            <div class="trust-item"><h3>15-Minute WhatsApp Reply</h3><p>Real humans, 7am-9pm</p></div>
+            <div class="trust-item"><h3>On-Time Delivery Promise</h3><p>Or 10% off your next order</p></div>
+            <div class="trust-item"><h3>15-Minute WhatsApp Reply</h3><p>Real humans, 7am–9pm</p></div>
             <div class="trust-item"><h3>Walk-ins Welcome</h3><p>Visit our Cake House in Imara Daima</p></div>
         </section>
 
@@ -233,21 +231,98 @@
             </div>
         </section>
 
-        <!-- FAQs -->
+        <!-- FAQs Section (Expanded) -->
         <section class="faqs" id="faqs" data-aos="fade-up">
             <h2>Frequently Asked Questions</h2>
-            <div class="faq-item">
-                <button type="button" class="faq-question" aria-expanded="false">What is the minimum notice for a custom cake? <span>+</span></button>
-                <div class="faq-answer"><p>We advise 48 hours notice for custom cakes, but we can often do same-day for our ready-made collection!</p></div>
+            <p class="faq-intro">Still have questions? We've answered the most common ones below – or just WhatsApp us anytime.</p>
+
+            <!-- Category: Delivery & On-Time Guarantee -->
+            <div class="faq-category">
+                <h3>Delivery & On‑Time Guarantee</h3>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false">What happens if my cake arrives late or gets damaged during delivery? <span>+</span></button>
+                    <div class="faq-answer"><p>If we're more than 30 minutes late, you get <strong>10% off your next order</strong>. If your cake arrives damaged, we'll remake it free – no arguments, no stress.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false">What if the delivery rider can't find my location or I'm not home? <span>+</span></button>
+                    <div class="faq-answer"><p>We'll call or text you when the rider is close. If you can't come to the gate, you can authorise us to leave the cake with a trusted neighbour, the estate security, or the office reception. We'll take a photo as proof of handover.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false">What if I need to reschedule my delivery? <span>+</span></button>
+                    <div class="faq-answer"><p>No problem. Just WhatsApp us as soon as possible, and we'll find a new time slot that works for you. For redelivery after a failed attempt, a small delivery fee may apply – but we'll always confirm with you first.</p></div>
+                </div>
             </div>
-            <div class="faq-item">
-                <button type="button" class="faq-question" aria-expanded="false">What are your delivery fees? <span>+</span></button>
-                <div class="faq-answer"><p>Fees depend on location (Nairobi, Kiambu, Machakos). Send us your location on WhatsApp and we'll quote instantly.</p></div>
+
+            <!-- Category: Payment & M-Pesa -->
+            <div class="faq-category">
+                <h3>Payment & M‑Pesa</h3>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false">How do I pay for my order? Is M-Pesa accepted? <span>+</span></button>
+                    <div class="faq-answer"><p>Yes! We accept <strong>M-Pesa, bank transfer, and cash on delivery</strong> for orders within Nairobi. For custom orders, a <strong>70% deposit</strong> is required to confirm your booking, with the balance due 24 hours before pickup or delivery.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false">What if I don't want to pay the full amount upfront? <span>+</span></button>
+                    <div class="faq-answer"><p>We understand. For orders placed more than a month in advance, you can pay a <strong>60% deposit</strong> and the remaining <strong>40% 24 hours before</strong> your event. We want to make things flexible for you.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false">What if I pay and there's a problem? <span>+</span></button>
+                    <div class="faq-answer"><p>We track every M-Pesa transaction with a unique receipt number so nothing gets lost. If a payment ever fails or shows "pending," our team will sort it out within minutes so you're never left wondering.</p></div>
+                </div>
             </div>
-            <div class="faq-item">
-                <button type="button" class="faq-question" aria-expanded="false">Can I pick up my cake from your Imara Daima store? <span>+</span></button>
-                <div class="faq-answer"><p>Yes! We highly encourage pickups. We are located at Imaara Mall.</p></div>
+
+            <!-- Category: Custom Orders -->
+            <div class="faq-category">
+                <h3>Custom Orders</h3>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false">How far in advance should I order a custom cake? <span>+</span></button>
+                    <div class="faq-answer"><p>For wedding cakes or very detailed designs, please give us at least <strong>2 weeks' notice</strong>. For standard birthday cakes, <strong>3–5 days</strong> is usually enough. But we can often do same-day for cakes in our ready-made collection – just WhatsApp us to check.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false">What if my design idea is too complicated or my budget is tight? <span>+</span></button>
+                    <div class="faq-answer"><p>Don't worry! Tell us your budget, and we'll adjust the size, design, and details to make it work. We've never met a cake idea we couldn't simplify beautifully – you'll still get a stunning cake without breaking the bank.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false">Can I see photos of your previous cakes before ordering? <span>+</span></button>
+                    <div class="faq-answer"><p>Yes! Chat with us on WhatsApp, and we'll send you a link to our portfolio of past cakes, wedding cake designs, and birthday masterpieces. See what we've made for other happy customers before you commit.</p></div>
+                </div>
             </div>
+
+            <!-- Category: Taste & Quality -->
+            <div class="faq-category">
+                <h3>Taste & Quality</h3>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false">How do I know your cakes actually taste good? <span>+</span></button>
+                    <div class="faq-answer"><p>We're known for our <strong>Real Taste Guarantee</strong>. We bake in small batches daily, using real butter, Belgian chocolate, and fresh cream – no preservatives, no dry cardboard. If your cake doesn't taste amazing, we'll remake it free.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false">Can I taste the cake before ordering a wedding cake? <span>+</span></button>
+                    <div class="faq-answer"><p>Yes! We offer <strong>free tasting sessions</strong> at our Imara Daima studio. Come sample our flavours, meet our pastry chef, and decide on your perfect combination before you commit.</p></div>
+                </div>
+            </div>
+
+            <!-- Category: Pickup & Storage -->
+            <div class="faq-category">
+                <h3>Pickup & Storage</h3>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false">How should I handle the cake when picking it up? <span>+</span></button>
+                    <div class="faq-answer"><p>Place your cake on a flat surface – the floor of the front passenger seat is perfect. Keep the aircon on if it's a hot day, drive slowly over bumps, and don't rush. Your cake should sit on a flat surface, not on your lap.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false">How should I store my cake before serving? <span>+</span></button>
+                    <div class="faq-answer"><p>Store it in a cool, dry place away from direct sunlight. On hot days, wrap it tightly and keep it in the fridge. Remove it about 2 hours before serving so it comes to room temperature – that's when the flavours are at their best.</p></div>
+                </div>
+            </div>
+
+            <!-- Category: Dietary Options -->
+            <div class="faq-category">
+                <h3>Dietary Options</h3>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false">Do you cater for allergies, gluten-free, or vegan requests? <span>+</span></button>
+                    <div class="faq-answer"><p>Yes! We can prepare <strong>gluten-free, sugar-free, and eggless</strong> options upon request. Just tell us at the time of ordering, and we'll make sure everyone at your event can enjoy a slice.</p></div>
+                </div>
+            </div>
+
+            <p class="faq-bottom">Need more answers? <a href="https://wa.me/254702555093" class="wa-link">WhatsApp us anytime</a> – we're here to help!</p>
         </section>
 
         <!-- Final CTA -->

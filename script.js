@@ -22,18 +22,37 @@ setTimeout(() => {
     if (preloader) preloader.classList.add('hidden');
 }, 5000);
 
-// 3. Mobile Menu
+// 3. Mobile Menu Toggle
 const menuToggle = document.getElementById('menu-toggle');
 const navLinks = document.getElementById('nav-links');
-menuToggle.addEventListener('click', () => {
+const header = document.querySelector('.site-header');
+
+menuToggle.addEventListener('click', (e) => {
+    e.stopPropagation(); // Prevent immediate close
     navLinks.classList.toggle('active');
     menuToggle.setAttribute('aria-expanded', navLinks.classList.contains('active'));
 });
 
+// Close menu when clicking outside
+document.addEventListener('click', (e) => {
+    if (navLinks.classList.contains('active') && !navLinks.contains(e.target) && e.target !== menuToggle) {
+        navLinks.classList.remove('active');
+        menuToggle.setAttribute('aria-expanded', 'false');
+    }
+});
+
+// Close menu when a nav link is clicked (so user can navigate)
+navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        menuToggle.setAttribute('aria-expanded', 'false');
+    });
+});
+
 // 4. Header Shadow
-const header = document.getElementById('site-header');
+const siteHeader = document.getElementById('site-header');
 window.addEventListener('scroll', () => {
-    header.style.boxShadow = window.scrollY > 50 ? '0 4px 12px rgba(0,0,0,0.1)' : 'none';
+    siteHeader.style.boxShadow = window.scrollY > 50 ? '0 4px 12px rgba(0,0,0,0.1)' : 'none';
 });
 
 // 5. FAQ Accordion
@@ -57,21 +76,7 @@ document.querySelectorAll('.wa-link').forEach(link => {
     });
 });
 
-// 7. Dark Mode Toggle
-const themeToggle = document.getElementById('theme-toggle');
-const currentTheme = localStorage.getItem('theme');
-if (currentTheme === 'dark') {
-    document.body.classList.add('dark-mode');
-    themeToggle.textContent = '☀️';
-}
-themeToggle.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-    localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-    AOS.refresh();
-});
-
-// 8. M-Pesa STK Push Simulation
+// 7. M-Pesa STK Push Simulation
 const mpesaOverlay = document.getElementById('mpesa-overlay');
 const mpesaLoader = document.getElementById('mpesa-loader');
 const mpesaSuccess = document.getElementById('mpesa-success');
@@ -80,7 +85,7 @@ const mpesaAmount = document.querySelector('.mpesa-amount');
 const mpesaClose = document.getElementById('mpesa-close');
 const mpesaCancel = document.getElementById('mpesa-cancel');
 
-let mpesaTimeout; // To store the timeout ID for cleanup
+let mpesaTimeout;
 
 function triggerMpesaPayment(amount) {
     mpesaOverlay.classList.add('active');
@@ -109,7 +114,7 @@ document.getElementById('final-whatsapp-btn').addEventListener('click', () => {
 
 if (mpesaClose) mpesaClose.addEventListener('click', () => {
     mpesaOverlay.classList.remove('active');
-    clearTimeout(mpesaTimeout); // Prevent late success if modal closed
+    clearTimeout(mpesaTimeout);
 });
 if (mpesaCancel) mpesaCancel.addEventListener('click', () => {
     clearTimeout(mpesaTimeout);
@@ -119,18 +124,21 @@ if (mpesaCancel) mpesaCancel.addEventListener('click', () => {
     setTimeout(() => { mpesaOverlay.classList.remove('active'); mpesaError.classList.add('hidden'); }, 1500);
 });
 
-// 9. Upsell Logic
+// 8. Upsell Logic
 const bundleItems = document.querySelectorAll('.bundle-item');
 const bundleTotalEl = document.getElementById('bundle-total');
 const bundleOrderBtn = document.getElementById('bundle-order-btn');
 let currentBundlePrice = 4500;
 
 function updateBundleTotal() {
-    let total = 0; let selectedCount = 0;
+    let total = 0;
     bundleItems.forEach(item => {
-        if (item.classList.contains('selected')) { total += parseInt(item.dataset.price); selectedCount++; }
+        if (item.classList.contains('selected')) { total += parseInt(item.dataset.price); }
     });
-    if (selectedCount === 0) { bundleItems[0].classList.add('selected'); total = parseInt(bundleItems[0].dataset.price); }
+    if (total === 0) {
+        bundleItems[0].classList.add('selected');
+        total = parseInt(bundleItems[0].dataset.price);
+    }
     currentBundlePrice = total;
     bundleTotalEl.textContent = `KES ${total.toLocaleString()}`;
 }
@@ -139,10 +147,8 @@ bundleItems.forEach(item => {
     item.addEventListener('click', () => {
         item.classList.toggle('selected');
         updateBundleTotal();
-        // Update aria-pressed for accessibility
         item.setAttribute('aria-pressed', item.classList.contains('selected'));
     });
-    // Keyboard support (Enter/Space)
     item.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
@@ -154,13 +160,12 @@ bundleItems.forEach(item => {
 if (bundleOrderBtn) bundleOrderBtn.addEventListener('click', () => triggerMpesaPayment(currentBundlePrice));
 updateBundleTotal();
 
-// 10. Cake Builder Logic
+// 9. Cake Builder Logic
 const builderInputs = document.querySelectorAll('input[type="radio"]');
 const builderTotalEl = document.getElementById('builder-total');
 const builderCheckoutBtn = document.getElementById('builder-checkout-btn');
 
 function updateRadioCardClasses() {
-    // Toggle .selected class on parent .radio-card for compatibility
     builderInputs.forEach(input => {
         const card = input.closest('.radio-card');
         if (input.checked) {
@@ -185,7 +190,6 @@ builderInputs.forEach(input => {
     });
 });
 
-// Initial setup
 calculateBuilderTotal();
 updateRadioCardClasses();
 
@@ -196,7 +200,7 @@ if (builderCheckoutBtn) {
     });
 }
 
-// 11. FOMO Toasts
+// 10. FOMO Toasts
 const purchaseToastContainer = document.getElementById('purchase-toast-container');
 const livePurchases = [
     { name: "Wanjiku", location: "Westlands", product: "Plum Prism Cake", price: "KES 4,500" },
@@ -213,7 +217,6 @@ function showPurchaseToast() {
     const time = mins === 1 ? "Just now" : `${mins} mins ago`;
     toast.innerHTML = `<div class="toast-icon">✓</div><div class="toast-content"><p><strong>${random.name}</strong> from ${random.location} just ordered <strong>${random.product}</strong></p><span class="toast-time">${time} • Verified M-Pesa</span></div><button type="button" class="toast-close">×</button>`;
     purchaseToastContainer.appendChild(toast);
-    // Remove after 6 seconds
     setTimeout(() => {
         if (toast.parentNode) toast.remove();
     }, 6000);
@@ -222,7 +225,7 @@ function showPurchaseToast() {
 setTimeout(showPurchaseToast, 4000);
 setInterval(showPurchaseToast, 15000);
 
-// 12. Tasting Calendar
+// 11. Tasting Calendar
 const tastingOverlay = document.getElementById('tasting-overlay');
 const openTastingBtn = document.getElementById('open-tasting-modal');
 const closeTastingBtn = document.getElementById('close-tasting-modal');
@@ -276,7 +279,7 @@ confirmTastingBtn.addEventListener('click', () => {
     tastingOverlay.classList.remove('active');
 });
 
-// 13. Lightbox Logic
+// 12. Lightbox Logic
 const galleryItems = document.querySelectorAll('.gallery-item');
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightbox-img');
@@ -294,14 +297,12 @@ function updateLightbox() {
 }
 
 galleryItems.forEach((item, index) => {
-    // Click handler
     item.addEventListener('click', () => {
         currentIndex = index;
         updateLightbox();
         lightbox.classList.add('active');
         document.body.style.overflow = 'hidden';
     });
-    // Keyboard support (Enter/Space)
     item.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
