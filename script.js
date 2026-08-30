@@ -3,7 +3,9 @@
 ========================================= */
 
 // 1. Initialize AOS
-AOS.init({ duration: 800, easing: 'ease-in-out', once: true });
+document.addEventListener('DOMContentLoaded', () => {
+    AOS.init({ duration: 800, easing: 'ease-in-out', once: true });
+});
 
 // 2. Preloader Logic
 window.addEventListener('load', () => {
@@ -41,7 +43,7 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// Close menu when a nav link is clicked (so user can navigate)
+// Close menu when a nav link is clicked
 navLinks.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
         navLinks.classList.remove('active');
@@ -122,6 +124,14 @@ if (mpesaCancel) mpesaCancel.addEventListener('click', () => {
     mpesaSuccess.classList.add('hidden');
     mpesaError.classList.remove('hidden');
     setTimeout(() => { mpesaOverlay.classList.remove('active'); mpesaError.classList.add('hidden'); }, 1500);
+});
+
+// Close M-Pesa modal on overlay click
+mpesaOverlay.addEventListener('click', (e) => {
+    if (e.target === mpesaOverlay) {
+        mpesaOverlay.classList.remove('active');
+        clearTimeout(mpesaTimeout);
+    }
 });
 
 // 8. Upsell Logic
@@ -215,7 +225,7 @@ function showPurchaseToast() {
     toast.className = 'purchase-toast';
     const mins = Math.floor(Math.random() * 10) + 1;
     const time = mins === 1 ? "Just now" : `${mins} mins ago`;
-    toast.innerHTML = `<div class="toast-icon">✓</div><div class="toast-content"><p><strong>${random.name}</strong> from ${random.location} just ordered <strong>${random.product}</strong></p><span class="toast-time">${time} • Verified M-Pesa</span></div><button type="button" class="toast-close">×</button>`;
+    toast.innerHTML = `<div class="toast-icon">✓</div><div class="toast-content"><p><strong>${random.name}</strong> from ${random.location} just ordered <strong>${random.product}</strong></p><span class="toast-time">${time} • Verified M-Pesa</span></div><button type="button" class="toast-close" aria-label="Close notification">×</button>`;
     purchaseToastContainer.appendChild(toast);
     setTimeout(() => {
         if (toast.parentNode) toast.remove();
@@ -277,6 +287,15 @@ confirmTastingBtn.addEventListener('click', () => {
     const message = `Hi Prism & Pastry! I'd like to book a FREE tasting session at your Imara Daima studio on ${selectedDate} at ${selectedTime}. Is this slot available?`;
     window.open(`https://wa.me/254702555093?text=${encodeURIComponent(message)}`, '_blank');
     tastingOverlay.classList.remove('active');
+});
+
+// Close tasting modal on Escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        if (tastingOverlay.classList.contains('active')) tastingOverlay.classList.remove('active');
+        if (mpesaOverlay.classList.contains('active')) mpesaOverlay.classList.remove('active');
+        if (lightbox.classList.contains('active')) closeLightbox();
+    }
 });
 
 // 12. Lightbox Logic
