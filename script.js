@@ -68,11 +68,11 @@ document.querySelectorAll('.faq-item').forEach(item => {
 });
 
 // 6. Smart WhatsApp Routing
-document.querySelectorAll('.wa-link').forEach(link => {
+document.querySelectorAll('.wa-link:not([data-share-location])').forEach(link => {
     link.addEventListener('click', function(e) {
         e.preventDefault();
         const message = this.dataset.message;
-        window.open(`https://wa.me/254702555093?text=${encodeURIComponent(message)}`, '_blank');
+        if (message) window.open(`https://wa.me/254702555093?text=${encodeURIComponent(message)}`, '_blank');
     });
 });
 
@@ -382,7 +382,64 @@ if (directionsBtn) {
     });
 }
 
-// Close modals on Escape
+// 13. Location Sharing via WhatsApp (with timeout & fallback)
+function shareLocation(btn) {
+    const button = btn || this;
+    const originalText = button.textContent;
+    
+    if (!("geolocation" in navigator)) {
+        const message = "Hi Prism & Pastry! I'd like to share my location, but my browser doesn't support geolocation. Please guide me on how to share it manually.";
+        window.open(`https://wa.me/254702555093?text=${encodeURIComponent(message)}`, '_blank');
+        return;
+    }
+    
+    button.textContent = '📍 Locating...';
+    button.disabled = true;
+    
+    const timeout = setTimeout(() => {
+        button.textContent = originalText;
+        button.disabled = false;
+        const message = "Hi Prism & Pastry! I tried to share my location but it took too long. Please guide me on how to share my live location via WhatsApp.";
+        window.open(`https://wa.me/254702555093?text=${encodeURIComponent(message)}`, '_blank');
+    }, 10000);
+    
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            clearTimeout(timeout);
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            const mapsLink = `https://maps.google.com/?q=${lat},${lng}`;
+            const message = `Hi Prism & Pastry! My current location is: ${mapsLink}. Please confirm delivery fee.`;
+            window.open(`https://wa.me/254702555093?text=${encodeURIComponent(message)}`, '_blank');
+            button.textContent = originalText;
+            button.disabled = false;
+        },
+        (error) => {
+            clearTimeout(timeout);
+            button.textContent = originalText;
+            button.disabled = false;
+            
+            let fallbackMsg;
+            if (error.code === error.PERMISSION_DENIED) {
+                fallbackMsg = "Hi Prism & Pastry! I'd like to share my location, but I need to enable location permissions. Please guide me on how to share it manually.";
+            } else {
+                fallbackMsg = "Hi Prism & Pastry! I couldn't fetch my location. Could you guide me on how to share my live location?";
+            }
+            window.open(`https://wa.me/254702555093?text=${encodeURIComponent(fallbackMsg)}`, '_blank');
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+}
+
+// Attach to all buttons with data-share-location
+document.querySelectorAll('[data-share-location]').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        shareLocation(this);
+    });
+});
+
+// 14. Close modals on Escape
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         if (tastingOverlay.classList.contains('active')) tastingOverlay.classList.remove('active');
@@ -391,7 +448,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// 13. Lightbox Logic
+// 15. Lightbox Logic
 const galleryItems = document.querySelectorAll('.gallery-item');
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightbox-img');
@@ -444,31 +501,3 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') lightboxPrev.click();
     if (e.key === 'ArrowRight') lightboxNext.click();
 });
-// Location Sharing via WhatsApp
-function shareLocation() {
-    const destination = 'Imaara+Mall+Imara+Daima+Nairobi';
-    const messageFallback = 'Hi Prism & Pastry! I\'d like to share my live location for delivery. Please guide me on how to share it on WhatsApp.';
-    
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-                const mapsLink = `https://maps.google.com/?q=${lat},${lng}`;
-                const message = `Hi Prism & Pastry! My current location is: ${mapsLink}. Please confirm delivery fee.`;
-                window.open(`https://wa.me/254702555093?text=${encodeURIComponent(message)}`, '_blank');
-            },
-            () => {
-                // If permission denied or error, fallback
-                window.open(`https://wa.me/254702555093?text=${encodeURIComponent(messageFallback)}`, '_blank');
-            }
-        );
-    } else {
-        // If geolocation not supported
-        window.open(`https://wa.me/254702555093?text=${encodeURIComponent(messageFallback)}`, '_blank');
-    }
-}
-
-// Attach to both buttons
-document.getElementById('share-location-btn').addEventListener('click', shareLocation);
-document.getElementById('share-location-final-btn').addEventListener('click', shareLocation);
