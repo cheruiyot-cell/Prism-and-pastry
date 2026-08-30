@@ -444,3 +444,31 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') lightboxPrev.click();
     if (e.key === 'ArrowRight') lightboxNext.click();
 });
+// Location Sharing via WhatsApp
+function shareLocation() {
+    const destination = 'Imaara+Mall+Imara+Daima+Nairobi';
+    const messageFallback = 'Hi Prism & Pastry! I\'d like to share my live location for delivery. Please guide me on how to share it on WhatsApp.';
+    
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                const mapsLink = `https://maps.google.com/?q=${lat},${lng}`;
+                const message = `Hi Prism & Pastry! My current location is: ${mapsLink}. Please confirm delivery fee.`;
+                window.open(`https://wa.me/254702555093?text=${encodeURIComponent(message)}`, '_blank');
+            },
+            () => {
+                // If permission denied or error, fallback
+                window.open(`https://wa.me/254702555093?text=${encodeURIComponent(messageFallback)}`, '_blank');
+            }
+        );
+    } else {
+        // If geolocation not supported
+        window.open(`https://wa.me/254702555093?text=${encodeURIComponent(messageFallback)}`, '_blank');
+    }
+}
+
+// Attach to both buttons
+document.getElementById('share-location-btn').addEventListener('click', shareLocation);
+document.getElementById('share-location-final-btn').addEventListener('click', shareLocation);
