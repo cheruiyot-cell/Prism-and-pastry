@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Core Meta Tags for SEO -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Prism & Pastry crafts premium geometric cakes in Nairobi. Bold designs, real taste, and on-time delivery across Nairobi, Kiambu & Machakos. Pickup in Imara Daima. Order on WhatsApp now!">
     <meta name="keywords" content="cakes Nairobi, geometric cakes, custom cakes Kenya, bakery Imara Daima, birthday cakes Nairobi, Prism and Pastry">
     <meta name="author" content="Prism & Pastry">
     <meta name="robots" content="index, follow">
-    
-    <!-- Open Graph / Social Media (SEM) -->
+
+    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Prism & Pastry | Bold Geometric Cakes in Nairobi">
     <meta property="og:description" content="Boldly designed, deliciously baked, perfectly on time. Custom cakes from KES 3,000. Visit our Imara Daima studio!">
@@ -17,7 +16,7 @@
     <meta property="og:url" content="https://prismandpastry.co.ke">
     <meta name="twitter:card" content="summary_large_image">
 
-    <!-- Local Business Schema (Crucial for Local SEO) -->
+    <!-- Local Business Schema -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -47,27 +46,24 @@
     }
     </script>
 
-    <!-- Font Preconnect (Speed Optimization) -->
+    <!-- Fonts & Libraries -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <!-- CSS & AOS Library -->
     <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Skip to content for accessibility -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- Branded Preloader -->
+    <!-- Preloader -->
     <div id="preloader" aria-hidden="true">
         <div class="preloader-logo">Prism <span>&</span> Pastry</div>
         <div class="preloader-sub">Nairobi's Boldest Cake House</div>
         <div class="preloader-loader"><div class="preloader-geo"></div></div>
     </div>
 
-    <!-- Header & Navigation -->
+    <!-- Header -->
     <header class="site-header" id="site-header">
         <nav class="nav-container" aria-label="Main Navigation">
             <div class="logo">Prism <span>&</span> Pastry</div>
@@ -83,7 +79,7 @@
     </header>
 
     <main id="main-content">
-        <!-- Hero Section -->
+        <!-- Hero -->
         <section class="hero">
             <div class="hero-content">
                 <p class="eyebrow">Geometric cakes, baked in Imara Daima.</p>
@@ -108,7 +104,7 @@
             <div class="trust-item"><h3>Walk-ins Welcome</h3><p>Visit our Cake House in Imara Daima</p></div>
         </section>
 
-        <!-- Services Overview -->
+        <!-- Services -->
         <section class="services" id="collection" data-aos="fade-up">
             <h2>How would you like to order?</h2>
             <div class="service-cards">
@@ -121,6 +117,7 @@
                     <h3>Local Delivery</h3>
                     <p>Cakes delivered fresh across Nairobi, Kiambu, and Machakos.</p>
                     <a href="#" class="wa-link card-link" data-message="Hi! I need a cake delivered. My location is [Enter Location]. What's the delivery fee?">Order Delivery →</a>
+                    <a href="#" class="wa-link card-link" data-message="Hi Prism & Pastry! I'd like to share my live location for delivery. Please let me know the delivery fee once you see my location.">Share My Location for Delivery →</a>
                 </article>
                 <article class="card" data-aos="fade-up" data-aos-delay="300">
                     <h3>Custom Orders</h3>
@@ -130,28 +127,39 @@
             </div>
         </section>
 
-        <!-- Interactive Cake Builder -->
+        <!-- Cake Builder -->
         <section class="cake-builder" id="builder" data-aos="fade-up">
             <div class="builder-heading">
                 <h2>Design Your Dream Cake</h2>
-                <p>Pick your flavors, size, and style. Watch the price update instantly.</p>
+                <p>Pick your flavours, size, style & extras. Watch the price update instantly.</p>
+            </div>
+            <div class="quick-picks">
+                <span class="quick-label">Popular Combos:</span>
+                <button type="button" class="quick-pick" data-preset="classic">Classic Birthday</button>
+                <button type="button" class="quick-pick" data-preset="luxury">Luxury Delight</button>
+                <button type="button" class="quick-pick" data-preset="tropical">Tropical Celebration</button>
             </div>
             <div class="builder-container">
                 <div class="builder-options">
                     <div class="option-group">
-                        <label>Choose Base Flavor</label>
+                        <label>Choose Base Flavour</label>
                         <div class="radio-group">
                             <label class="radio-card"><input type="radio" name="flavor" value="3000" checked> <span>Vanilla Bean (KES 3,000)</span></label>
                             <label class="radio-card"><input type="radio" name="flavor" value="3500"> <span>Belgian Chocolate (KES 3,500)</span></label>
                             <label class="radio-card"><input type="radio" name="flavor" value="4000"> <span>Red Velvet (KES 4,000)</span></label>
+                            <label class="radio-card"><input type="radio" name="flavor" value="4500"> <span>Kenyan Coffee (KES 4,500)</span></label>
+                            <label class="radio-card"><input type="radio" name="flavor" value="4500"> <span>Passion Fruit & Mango (KES 4,500)</span></label>
+                            <label class="radio-card"><input type="radio" name="flavor" value="4200"> <span>Almond (KES 4,200)</span></label>
                         </div>
                     </div>
                     <div class="option-group">
-                        <label>Choose Size</label>
+                        <label>Choose Size (Servings)</label>
                         <div class="radio-group">
                             <label class="radio-card"><input type="radio" name="size" value="0" checked> <span>Serves 10 (Base)</span></label>
                             <label class="radio-card"><input type="radio" name="size" value="1500"> <span>Serves 20 (+ KES 1,500)</span></label>
                             <label class="radio-card"><input type="radio" name="size" value="3000"> <span>Serves 40 (+ KES 3,000)</span></label>
+                            <label class="radio-card"><input type="radio" name="size" value="4500"> <span>Serves 60 (+ KES 4,500)</span></label>
+                            <label class="radio-card"><input type="radio" name="size" value="6000"> <span>Serves 80 (+ KES 6,000)</span></label>
                         </div>
                     </div>
                     <div class="option-group">
@@ -160,6 +168,36 @@
                             <label class="radio-card"><input type="radio" name="theme" value="0" checked> <span>Minimalist (Base)</span></label>
                             <label class="radio-card"><input type="radio" name="theme" value="1000"> <span>Geometric Art (+ KES 1,000)</span></label>
                             <label class="radio-card"><input type="radio" name="theme" value="2000"> <span>Street Art Iconic (+ KES 2,000)</span></label>
+                            <label class="radio-card"><input type="radio" name="theme" value="1500"> <span>Floral Elegance (+ KES 1,500)</span></label>
+                            <label class="radio-card"><input type="radio" name="theme" value="2500"> <span>Luxury Gold (+ KES 2,500)</span></label>
+                        </div>
+                    </div>
+                    <div class="option-group">
+                        <label>Choose Filling</label>
+                        <div class="radio-group">
+                            <label class="radio-card"><input type="radio" name="filling" value="0" checked> <span>No Filling (Base)</span></label>
+                            <label class="radio-card"><input type="radio" name="filling" value="500"> <span>Chocolate Ganache (+ KES 500)</span></label>
+                            <label class="radio-card"><input type="radio" name="filling" value="700"> <span>Fresh Cream & Berry (+ KES 700)</span></label>
+                            <label class="radio-card"><input type="radio" name="filling" value="600"> <span>Caramel (+ KES 600)</span></label>
+                        </div>
+                    </div>
+                    <div class="option-group">
+                        <label>Choose Topper</label>
+                        <div class="radio-group">
+                            <label class="radio-card"><input type="radio" name="topper" value="0" checked> <span>No Topper (Base)</span></label>
+                            <label class="radio-card"><input type="radio" name="topper" value="200"> <span>Custom Name (+ KES 200)</span></label>
+                            <label class="radio-card"><input type="radio" name="topper" value="300"> <span>Edible Flowers (+ KES 300)</span></label>
+                            <label class="radio-card"><input type="radio" name="topper" value="150"> <span>Candles (+ KES 150)</span></label>
+                        </div>
+                    </div>
+                    <div class="option-group">
+                        <label>Extras & Add‑ons</label>
+                        <div class="radio-group">
+                            <label class="radio-card"><input type="radio" name="addon" value="0" checked> <span>None (Base)</span></label>
+                            <label class="radio-card"><input type="radio" name="addon" value="200"> <span>Cake Knife & Server (+ KES 200)</span></label>
+                            <label class="radio-card"><input type="radio" name="addon" value="150"> <span>Sparklers (+ KES 150)</span></label>
+                            <label class="radio-card"><input type="radio" name="addon" value="300"> <span>Balloons (+ KES 300)</span></label>
+                            <label class="radio-card"><input type="radio" name="addon" value="250"> <span>Custom Message Banner (+ KES 250)</span></label>
                         </div>
                     </div>
                 </div>
@@ -167,15 +205,19 @@
                     <div class="summary-card">
                         <h3>Your Custom Creation</h3>
                         <div class="summary-cake-icon">🎂</div>
+                        <div class="summary-selections" id="summary-selections">
+                            <p>Vanilla Bean • Serves 10 • Minimalist</p>
+                        </div>
                         <p class="summary-price" id="builder-total">KES 3,000</p>
-                        <p class="summary-note">*Quote is an estimate. Final price confirmed on WhatsApp.</p>
+                        <p class="summary-note">*Final price confirmed on WhatsApp.</p>
                         <button type="button" id="builder-checkout-btn" class="cta-btn primary">Add to Cart & Pay</button>
+                        <button type="button" id="builder-reset-btn" class="reset-btn">Reset Selection</button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Frequently Bought Together -->
+        <!-- Upsell -->
         <section class="upsell-section" data-aos="fade-up">
             <div class="upsell-heading">
                 <h2>Goes Perfectly With Your Order</h2>
@@ -214,7 +256,7 @@
             </div>
         </section>
 
-        <!-- Virtual Gallery -->
+        <!-- Gallery -->
         <section class="gallery-section" data-aos="fade-up">
             <div class="gallery-heading"><h2>Our Masterpieces</h2><p>Tap any cake to view it in full detail.</p></div>
             <div class="gallery-grid" id="gallery-grid">
@@ -227,12 +269,10 @@
             </div>
         </section>
 
-        <!-- FAQs Section (Expanded) -->
+        <!-- FAQs -->
         <section class="faqs" id="faqs" data-aos="fade-up">
             <h2>Frequently Asked Questions</h2>
             <p class="faq-intro">Still have questions? We've answered the most common ones below – or just WhatsApp us anytime.</p>
-
-            <!-- Category: Delivery & On-Time Guarantee -->
             <div class="faq-category">
                 <h3>Delivery & On‑Time Guarantee</h3>
                 <div class="faq-item">
@@ -248,8 +288,6 @@
                     <div class="faq-answer"><p>No problem. Just WhatsApp us as soon as possible, and we'll find a new time slot that works for you. For redelivery after a failed attempt, a small delivery fee may apply – but we'll always confirm with you first.</p></div>
                 </div>
             </div>
-
-            <!-- Category: Payment & M-Pesa -->
             <div class="faq-category">
                 <h3>Payment & M‑Pesa</h3>
                 <div class="faq-item">
@@ -265,8 +303,6 @@
                     <div class="faq-answer"><p>We track every M-Pesa transaction with a unique receipt number so nothing gets lost. If a payment ever fails or shows "pending," our team will sort it out within minutes so you're never left wondering.</p></div>
                 </div>
             </div>
-
-            <!-- Category: Custom Orders -->
             <div class="faq-category">
                 <h3>Custom Orders</h3>
                 <div class="faq-item">
@@ -282,8 +318,6 @@
                     <div class="faq-answer"><p>Yes! Chat with us on WhatsApp, and we'll send you a link to our portfolio of past cakes, wedding cake designs, and birthday masterpieces. See what we've made for other happy customers before you commit.</p></div>
                 </div>
             </div>
-
-            <!-- Category: Taste & Quality -->
             <div class="faq-category">
                 <h3>Taste & Quality</h3>
                 <div class="faq-item">
@@ -295,8 +329,6 @@
                     <div class="faq-answer"><p>Yes! We offer <strong>free tasting sessions</strong> at our Imara Daima studio. Come sample our flavours, meet our pastry chef, and decide on your perfect combination before you commit.</p></div>
                 </div>
             </div>
-
-            <!-- Category: Pickup & Storage -->
             <div class="faq-category">
                 <h3>Pickup & Storage</h3>
                 <div class="faq-item">
@@ -308,8 +340,6 @@
                     <div class="faq-answer"><p>Store it in a cool, dry place away from direct sunlight. On hot days, wrap it tightly and keep it in the fridge. Remove it about 2 hours before serving so it comes to room temperature – that's when the flavours are at their best.</p></div>
                 </div>
             </div>
-
-            <!-- Category: Dietary Options -->
             <div class="faq-category">
                 <h3>Dietary Options</h3>
                 <div class="faq-item">
@@ -317,22 +347,33 @@
                     <div class="faq-answer"><p>Yes! We can prepare <strong>gluten-free, sugar-free, and eggless</strong> options upon request. Just tell us at the time of ordering, and we'll make sure everyone at your event can enjoy a slice.</p></div>
                 </div>
             </div>
-
             <p class="faq-bottom">Need more answers? <a href="https://wa.me/254702555093" class="wa-link">WhatsApp us anytime</a> – we're here to help!</p>
         </section>
 
-        <!-- Final CTA -->
+        <!-- Final CTA & Map -->
         <section class="final-cta" id="visit" data-aos="fade-up">
             <div class="visit-block">
                 <h3>Come see the art in person.</h3>
                 <p>Free tasting sessions available at our Imara Daima Cake House.</p>
                 <button type="button" id="open-tasting-modal" class="cta-btn secondary">Book a Free Tasting Session</button>
                 <a href="https://maps.google.com/?q=Imaara+Mall+Nairobi" class="cta-btn secondary" target="_blank" rel="noopener">Get Directions</a>
+                <button type="button" id="directions-btn" class="cta-btn secondary">📍 Directions from My Location</button>
             </div>
             <div class="order-block">
                 <h3>Craving something bold now?</h3>
                 <p>We only accept 12 custom orders per week to ensure on-time, premium delivery.</p>
                 <button type="button" id="final-whatsapp-btn" class="cta-btn primary">Order on WhatsApp</button>
+                <a href="https://wa.me/254702555093?text=Hi%20Prism%20%26%20Pastry!%20I%20need%20delivery%20and%20would%20like%20to%20share%20my%20live%20location." class="cta-btn secondary" target="_blank">Share My Location for Delivery</a>
+            </div>
+        </section>
+
+        <!-- Embedded Map -->
+        <section class="map-section" data-aos="fade-up">
+            <div class="map-container">
+                <iframe
+                    src="https://maps.google.com/maps?q=Imaara%20Mall%2C%20Mombasa%20Road%2C%20Imara%20Daima%2C%20Nairobi&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                    width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    title="Prism & Pastry Location at Imaara Mall"></iframe>
             </div>
         </section>
     </main>
@@ -371,7 +412,7 @@
         <p class="copyright">&copy; 2026 Prism & Pastry. All rights reserved.</p>
     </footer>
 
-    <!-- Floating WhatsApp Button -->
+    <!-- Floating WhatsApp -->
     <a href="https://wa.me/254702555093" class="floating-wa" aria-label="Chat on WhatsApp">
         <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Icon" loading="lazy">
     </a>
@@ -396,7 +437,7 @@
         </div>
     </div>
 
-    <!-- Tasting Calendar Modal -->
+    <!-- Tasting Modal -->
     <div id="tasting-overlay" class="mpesa-overlay" role="dialog" aria-modal="true" aria-labelledby="tasting-title">
         <div class="tasting-modal">
             <div class="tasting-header"><h3 id="tasting-title">Book Your Free Tasting Session</h3><button type="button" id="close-tasting-modal" class="modal-close-btn" aria-label="Close">&times;</button></div>
@@ -423,7 +464,6 @@
         <button type="button" class="lightbox-next" id="lightbox-next" aria-label="Next image">&#10095;</button>
     </div>
 
-    <!-- Scripts (Deferred for Speed) -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
     <script src="script.js" defer></script>
 </body>

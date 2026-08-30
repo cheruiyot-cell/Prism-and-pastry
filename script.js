@@ -18,7 +18,7 @@ window.addEventListener('load', () => {
     }, 1200);
 });
 
-// Extra safety: also remove preloader after 5 seconds if load event hasn't fired
+// Extra safety
 setTimeout(() => {
     const preloader = document.getElementById('preloader');
     if (preloader) preloader.classList.add('hidden');
@@ -30,12 +30,11 @@ const navLinks = document.getElementById('nav-links');
 const header = document.querySelector('.site-header');
 
 menuToggle.addEventListener('click', (e) => {
-    e.stopPropagation(); // Prevent immediate close
+    e.stopPropagation();
     navLinks.classList.toggle('active');
     menuToggle.setAttribute('aria-expanded', navLinks.classList.contains('active'));
 });
 
-// Close menu when clicking outside
 document.addEventListener('click', (e) => {
     if (navLinks.classList.contains('active') && !navLinks.contains(e.target) && e.target !== menuToggle) {
         navLinks.classList.remove('active');
@@ -43,7 +42,6 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// Close menu when a nav link is clicked
 navLinks.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
         navLinks.classList.remove('active');
@@ -106,10 +104,8 @@ function triggerMpesaPayment(amount) {
     }, 2500);
 }
 
-// Hero M-Pesa Trigger
 document.getElementById('mpesa-trigger').addEventListener('click', (e) => { e.preventDefault(); triggerMpesaPayment(4500); });
 
-// Final CTA WhatsApp Trigger
 document.getElementById('final-whatsapp-btn').addEventListener('click', () => {
     window.open('https://wa.me/254702555093?text=Hi!%20I%20want%20to%20order%20a%20cake.', '_blank');
 });
@@ -126,7 +122,6 @@ if (mpesaCancel) mpesaCancel.addEventListener('click', () => {
     setTimeout(() => { mpesaOverlay.classList.remove('active'); mpesaError.classList.add('hidden'); }, 1500);
 });
 
-// Close M-Pesa modal on overlay click
 mpesaOverlay.addEventListener('click', (e) => {
     if (e.target === mpesaOverlay) {
         mpesaOverlay.classList.remove('active');
@@ -174,6 +169,30 @@ updateBundleTotal();
 const builderInputs = document.querySelectorAll('input[type="radio"]');
 const builderTotalEl = document.getElementById('builder-total');
 const builderCheckoutBtn = document.getElementById('builder-checkout-btn');
+const builderResetBtn = document.getElementById('builder-reset-btn');
+const summarySelections = document.getElementById('summary-selections');
+const quickPickBtns = document.querySelectorAll('.quick-pick');
+
+const fieldLabels = {
+    flavor: 'Flavour',
+    size: 'Size',
+    theme: 'Theme',
+    filling: 'Filling',
+    topper: 'Topper',
+    addon: 'Add‑on'
+};
+
+function getSelectedOptions() {
+    const selected = {};
+    builderInputs.forEach(input => {
+        if (input.checked) {
+            const name = input.name;
+            const label = input.closest('.radio-card').querySelector('span').textContent.trim();
+            selected[name] = label;
+        }
+    });
+    return selected;
+}
 
 function updateRadioCardClasses() {
     builderInputs.forEach(input => {
@@ -191,13 +210,59 @@ function calculateBuilderTotal() {
     builderInputs.forEach(input => { if (input.checked) total += parseInt(input.value); });
     builderTotalEl.textContent = `KES ${total.toLocaleString()}`;
     builderCheckoutBtn.dataset.amount = total;
+
+    const selected = getSelectedOptions();
+    let summaryText = '';
+    for (const key in selected) {
+        let text = selected[key];
+        if (text.includes('(+ KES')) {
+            text = text.split(' (+')[0];
+        }
+        if (text === 'No Filling' || text === 'No Topper' || text === 'None') continue;
+        summaryText += text + ' • ';
+    }
+    summaryText = summaryText.replace(/ • $/, '');
+    summarySelections.innerHTML = `<p>${summaryText}</p>`;
 }
 
 builderInputs.forEach(input => {
     input.addEventListener('change', () => {
         calculateBuilderTotal();
         updateRadioCardClasses();
+        quickPickBtns.forEach(btn => btn.classList.remove('active'));
     });
+});
+
+const presets = {
+    classic: { flavor: '3000', size: '0', theme: '0', filling: '500', topper: '200', addon: '150' },
+    luxury: { flavor: '3500', size: '1500', theme: '2500', filling: '500', topper: '300', addon: '150' },
+    tropical: { flavor: '4500', size: '0', theme: '1000', filling: '700', topper: '300', addon: '300' }
+};
+
+quickPickBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const preset = btn.dataset.preset;
+        const values = presets[preset];
+        builderInputs.forEach(input => {
+            if (values[input.name] === input.value) {
+                input.checked = true;
+            }
+        });
+        calculateBuilderTotal();
+        updateRadioCardClasses();
+        quickPickBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    });
+});
+
+builderResetBtn.addEventListener('click', () => {
+    builderInputs.forEach(input => {
+        const group = document.querySelectorAll(`input[name="${input.name}"]`);
+        group[0].checked = true;
+    });
+    calculateBuilderTotal();
+    updateRadioCardClasses();
+    quickPickBtns.forEach(b => b.classList.remove('active'));
 });
 
 calculateBuilderTotal();
@@ -289,7 +354,35 @@ confirmTastingBtn.addEventListener('click', () => {
     tastingOverlay.classList.remove('active');
 });
 
-// Close tasting modal on Escape
+// 12. Directions Button - Get User Location
+const directionsBtn = document.getElementById('directions-btn');
+if (directionsBtn) {
+    directionsBtn.addEventListener('click', () => {
+        const destination = 'Imaara+Mall+Imara+Daima+Nairobi';
+        if (navigator.geolocation) {
+            directionsBtn.textContent = 'Locating...';
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    const url = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${destination}&travelmode=driving`;
+                    window.open(url, '_blank');
+                    directionsBtn.textContent = '📍 Directions from My Location';
+                },
+                () => {
+                    const url = `https://www.google.com/maps/dir/?api=1&destination=${destination}&travelmode=driving`;
+                    window.open(url, '_blank');
+                    directionsBtn.textContent = '📍 Directions from My Location';
+                }
+            );
+        } else {
+            const url = `https://www.google.com/maps/dir/?api=1&destination=${destination}&travelmode=driving`;
+            window.open(url, '_blank');
+        }
+    });
+}
+
+// Close modals on Escape
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         if (tastingOverlay.classList.contains('active')) tastingOverlay.classList.remove('active');
@@ -298,7 +391,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// 12. Lightbox Logic
+// 13. Lightbox Logic
 const galleryItems = document.querySelectorAll('.gallery-item');
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightbox-img');
