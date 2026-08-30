@@ -67,7 +67,7 @@ document.querySelectorAll('.faq-item').forEach(item => {
     });
 });
 
-// 6. Smart WhatsApp Routing
+// 6. Smart WhatsApp Routing (excluding location-share buttons)
 document.querySelectorAll('.wa-link:not([data-share-location])').forEach(link => {
     link.addEventListener('click', function(e) {
         e.preventDefault();
@@ -165,35 +165,42 @@ bundleItems.forEach(item => {
 if (bundleOrderBtn) bundleOrderBtn.addEventListener('click', () => triggerMpesaPayment(currentBundlePrice));
 updateBundleTotal();
 
-// 9. Cake Builder Logic
+// 9. Cake Builder Logic (Enhanced with Animations)
 const builderInputs = document.querySelectorAll('input[type="radio"]');
 const builderTotalEl = document.getElementById('builder-total');
 const builderCheckoutBtn = document.getElementById('builder-checkout-btn');
 const builderResetBtn = document.getElementById('builder-reset-btn');
 const summarySelections = document.getElementById('summary-selections');
 const quickPickBtns = document.querySelectorAll('.quick-pick');
+const cakeLayer1 = document.querySelector('.layer-1');
+const cakeLayer2 = document.querySelector('.layer-2');
+const cakeLayer3 = document.querySelector('.layer-3');
+const cakeFrosting = document.getElementById('cake-frosting');
+const cakeTopper = document.getElementById('cake-topper');
 
-const fieldLabels = {
-    flavor: 'Flavour',
-    size: 'Size',
-    theme: 'Theme',
-    filling: 'Filling',
-    topper: 'Topper',
-    addon: 'Add‑on'
+// Flavor colors
+const flavorColors = {
+    '3000': '#f5c6c6', // Vanilla
+    '3500': '#8b5a2b', // Chocolate
+    '4000': '#c0392b', // Red Velvet
+    '4500': '#6f4e37', // Kenyan Coffee
+    '4200': '#f0d9b5'  // Almond
 };
 
+// Function to get selected options
 function getSelectedOptions() {
     const selected = {};
     builderInputs.forEach(input => {
         if (input.checked) {
             const name = input.name;
             const label = input.closest('.radio-card').querySelector('span').textContent.trim();
-            selected[name] = label;
+            selected[name] = { value: input.value, label };
         }
     });
     return selected;
 }
 
+// Update radio card classes
 function updateRadioCardClasses() {
     builderInputs.forEach(input => {
         const card = input.closest('.radio-card');
@@ -205,16 +212,72 @@ function updateRadioCardClasses() {
     });
 }
 
+// Animate price change
+function animatePrice() {
+    builderTotalEl.classList.remove('update');
+    void builderTotalEl.offsetWidth; // trigger reflow
+    builderTotalEl.classList.add('update');
+}
+
+// Update cake preview based on selections
+function updateCakePreview(selected) {
+    // Flavor color
+    const flavor = selected.flavor ? selected.flavor.value : '3000';
+    const color = flavorColors[flavor] || '#f5c6c6';
+    cakeLayer1.style.background = color;
+    cakeLayer2.style.background = color;
+    cakeLayer3.style.background = color;
+    
+    // Size affects number of layers
+    const sizeVal = parseInt(selected.size ? selected.size.value : 0);
+    let layersToShow = 3;
+    if (sizeVal >= 6000) layersToShow = 3;      // 80 servings
+    else if (sizeVal >= 4500) layersToShow = 3; // 60 servings
+    else if (sizeVal >= 3000) layersToShow = 2; // 40 servings
+    else if (sizeVal >= 1500) layersToShow = 2; // 20 servings
+    else layersToShow = 1;                      // 10 servings
+    
+    // Show/hide layers
+    cakeLayer1.style.display = layersToShow >= 1 ? 'block' : 'none';
+    cakeLayer2.style.display = layersToShow >= 2 ? 'block' : 'none';
+    cakeLayer3.style.display = layersToShow >= 3 ? 'block' : 'none';
+    
+    // Topper changes based on selected topper
+    const topper = selected.topper ? selected.topper.value : '0';
+    if (topper === '200') cakeTopper.textContent = '🖋️';
+    else if (topper === '300') cakeTopper.textContent = '🌼';
+    else if (topper === '150') cakeTopper.textContent = '🕯️';
+    else cakeTopper.textContent = '🎂';
+    
+    // Theme affects frosting color
+    const theme = selected.theme ? selected.theme.value : '0';
+    if (theme === '2500') cakeFrosting.style.background = '#ffd700';
+    else if (theme === '2000') cakeFrosting.style.background = '#ff4d4d';
+    else if (theme === '1500') cakeFrosting.style.background = '#f8b4d9';
+    else if (theme === '1000') cakeFrosting.style.background = '#f0f0f0';
+    else cakeFrosting.style.background = '#fff';
+}
+
+// Calculate total and update summary
 function calculateBuilderTotal() {
     let total = 0;
-    builderInputs.forEach(input => { if (input.checked) total += parseInt(input.value); });
+    const selected = {};
+    builderInputs.forEach(input => {
+        if (input.checked) {
+            total += parseInt(input.value);
+            selected[input.name] = { value: input.value, label: input.closest('.radio-card').querySelector('span').textContent.trim() };
+        }
+    });
+    
+    // Animate price
     builderTotalEl.textContent = `KES ${total.toLocaleString()}`;
     builderCheckoutBtn.dataset.amount = total;
-
-    const selected = getSelectedOptions();
+    animatePrice();
+    
+    // Update selections summary
     let summaryText = '';
     for (const key in selected) {
-        let text = selected[key];
+        let text = selected[key].label;
         if (text.includes('(+ KES')) {
             text = text.split(' (+')[0];
         }
@@ -223,8 +286,12 @@ function calculateBuilderTotal() {
     }
     summaryText = summaryText.replace(/ • $/, '');
     summarySelections.innerHTML = `<p>${summaryText}</p>`;
+    
+    // Update cake preview
+    updateCakePreview(selected);
 }
 
+// Event listeners
 builderInputs.forEach(input => {
     input.addEventListener('change', () => {
         calculateBuilderTotal();
@@ -233,6 +300,7 @@ builderInputs.forEach(input => {
     });
 });
 
+// Quick Pick Presets
 const presets = {
     classic: { flavor: '3000', size: '0', theme: '0', filling: '500', topper: '200', addon: '150' },
     luxury: { flavor: '3500', size: '1500', theme: '2500', filling: '500', topper: '300', addon: '150' },
@@ -255,6 +323,7 @@ quickPickBtns.forEach(btn => {
     });
 });
 
+// Reset button
 builderResetBtn.addEventListener('click', () => {
     builderInputs.forEach(input => {
         const group = document.querySelectorAll(`input[name="${input.name}"]`);
@@ -265,6 +334,7 @@ builderResetBtn.addEventListener('click', () => {
     quickPickBtns.forEach(b => b.classList.remove('active'));
 });
 
+// Initialize
 calculateBuilderTotal();
 updateRadioCardClasses();
 
