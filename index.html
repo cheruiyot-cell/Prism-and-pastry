@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Core Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Prism & Pastry crafts premium geometric cakes in Nairobi. Bold designs, real taste, and on-time delivery across Nairobi, Kiambu & Machakos. Pickup in Imara Daima. Order on WhatsApp now!">
+    <meta name="theme-color" content="#1a1a1a">
+    <title>Prism &amp; Pastry | On-Time Geometric Cakes in Nairobi</title>
+    <meta name="description" content="Hand-decorated geometric cakes, baked fresh the morning of your event. Delivered on time across Nairobi, Kiambu & Machakos — or the cake is free. From KES 3,000. Pickup in Imara Daima.">
     <meta name="keywords" content="cakes Nairobi, geometric cakes, custom cakes Kenya, bakery Imara Daima, birthday cakes Nairobi, Prism and Pastry">
     <meta name="author" content="Prism & Pastry">
     <meta name="robots" content="index, follow">
 
-    <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Prism & Pastry | Bold Geometric Cakes in Nairobi">
-    <meta property="og:description" content="Boldly designed, deliciously baked, perfectly on time. Custom cakes from KES 3,000. Visit our Imara Daima studio!">
+    <meta property="og:title" content="Prism & Pastry | Your Cake Arrives On Time — Or It's Free">
+    <meta property="og:description" content="Hand-decorated geometric cakes, baked fresh the morning of your event. From KES 3,000. Pickup in Imara Daima, delivery across Nairobi, Kiambu & Machakos.">
     <meta property="og:image" content="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1200&auto=format&fit=crop">
     <meta property="og:url" content="https://prismandpastry.co.ke">
     <meta name="twitter:card" content="summary_large_image">
 
-    <!-- Local Business Schema -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%82%3C/text%3E%3C/svg%3E">
+
+    <!-- Structured Data: LocalBusiness + aggregateRating + areaServed -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -26,6 +28,7 @@
         "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1200&auto=format&fit=crop",
         "telephone": "+254702555093",
         "priceRange": "KES 3,000 - KES 8,000",
+        "url": "https://prismandpastry.co.ke",
         "address": {
             "@type": "PostalAddress",
             "streetAddress": "Imaara Mall, Mombasa Road",
@@ -33,24 +36,55 @@
             "addressRegion": "Nairobi",
             "addressCountry": "KE"
         },
-        "geo": {
-            "@type": "GeoCoordinates",
-            "latitude": -1.3035,
-            "longitude": 36.8638
-        },
+        "geo": { "@type": "GeoCoordinates", "latitude": -1.3035, "longitude": 36.8638 },
+        "areaServed": [
+            { "@type": "City", "name": "Nairobi" },
+            { "@type": "AdministrativeArea", "name": "Kiambu County" },
+            { "@type": "AdministrativeArea", "name": "Machakos County" }
+        ],
         "openingHoursSpecification": [{
             "@type": "OpeningHoursSpecification",
             "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
             "opens": "07:00",
             "closes": "21:00"
-        }]
+        }],
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "reviewCount": "63",
+            "bestRating": "5"
+        },
+        "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Cakes",
+            "itemListElement": [
+                { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Geometric Celebration Cake" }, "price": "3000", "priceCurrency": "KES" },
+                { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Custom Design Cake" }, "price": "4500", "priceCurrency": "KES" }
+            ]
+        }
     }
     </script>
 
-    <!-- Fonts & Libraries -->
+    <!-- Structured Data: FAQPage -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "How much is delivery?", "acceptedAnswer": { "@type": "Answer", "text": "Imara Daima and South B are free. CBD, Westlands, Kilimani, Karen are KES 300–500. Kiambu and Machakos are quoted on WhatsApp before you pay." } },
+        { "@type": "Question", "name": "What's the deposit?", "acceptedAnswer": { "@type": "Answer", "text": "50% deposit locks your date. Balance on delivery or pickup. For orders 30+ days out, we can split into three payments." } },
+        { "@type": "Question", "name": "What if my cake is late or damaged?", "acceptedAnswer": { "@type": "Answer", "text": "More than 30 minutes late? The cake is free. Damaged in transit? We bake a replacement the same day at our cost." } },
+        { "@type": "Question", "name": "Do I approve the design before paying?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. You send your idea, we send back a sketch and final price within 2 hours. Nothing is charged until you approve." } },
+        { "@type": "Question", "name": "How far in advance should I order a custom cake?", "acceptedAnswer": { "@type": "Answer", "text": "Wedding cakes need 2 weeks notice. Standard birthday cakes need 3–5 days. Same-day is often possible for ready-made cakes." } },
+        { "@type": "Question", "name": "Do you cater for allergies, gluten-free, or vegan requests?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. We prepare gluten-free, sugar-free, and eggless options on request. Tell us when you order." } }
+      ]
+    }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -60,7 +94,7 @@
 
     <!-- Preloader -->
     <div id="preloader" aria-hidden="true">
-        <div class="preloader-logo">Prism <span>&</span> Pastry</div>
+        <div class="preloader-logo">Prism <span>&amp;</span> Pastry</div>
         <div class="preloader-sub">Nairobi's Boldest Cake House</div>
         <div class="preloader-loader"><div class="preloader-geo"></div></div>
     </div>
@@ -68,164 +102,200 @@
     <!-- Header -->
     <header class="site-header" id="site-header">
         <nav class="nav-container" aria-label="Main Navigation">
-            <div class="logo">Prism <span>&</span> Pastry</div>
-            <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+            <a href="#" class="logo" aria-label="Prism and Pastry, back to top">Prism <span>&amp;</span> Pastry</a>
+
+            <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">☰</button>
+
             <ul class="nav-links" id="nav-links">
-                <li><a href="#collection">Shop Cakes</a></li>
-                <li><a href="#builder">Custom Orders</a></li>
-                <li><a href="#visit">Visit Us</a></li>
+                <li><a href="#collection">Cakes</a></li>
+                <li><a href="#builder">Custom</a></li>
+                <li><a href="#gallery">Gallery</a></li>
                 <li><a href="#faqs">FAQs</a></li>
             </ul>
-            <a href="https://wa.me/254702555093?text=Hi%20Prism%20%26%20Pastry!%20I%20just%20saw%20your%20website%20and%20I'd%20like%20to%20make%20an%20enquiry%20about%20a%20cake." class="cta-btn whatsapp-btn">Order on WhatsApp</a>
+
+            <div class="nav-actions">
+                <button type="button" class="cart-button" id="cart-button" aria-label="Open cart, 0 items" aria-haspopup="dialog">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    <span class="cart-count is-empty" id="cart-count" aria-live="polite" aria-atomic="true">0</span>
+                </button>
+
+                <a href="https://wa.me/254702555093?text=Hi!%20I%20need%20a%20cake%20for%20%5Bdate%5D%20for%20%5Bnumber%5D%20people.%20Can%20you%20help%3F" class="cta-btn whatsapp-btn" target="_blank" rel="noopener">Order on WhatsApp</a>
+            </div>
         </nav>
     </header>
 
     <main id="main-content">
-        <!-- Hero -->
+
+        <!-- HERO -->
         <section class="hero">
             <div class="hero-content">
-                <p class="eyebrow">Geometric cakes, baked in Imara Daima.</p>
-                <h1>Bold, beautiful cakes that actually taste like heaven – delivered on time, every time.</h1>
-                <p class="subhead">Tired of cakes that look amazing but taste like cardboard? Or bakers who vanish after you pay?<br>We're Prism & Pastry – a Nairobi cake house in Imara Daima. We bake fresh in small batches, use real butter and quality ingredients, and deliver <strong>on the dot</strong> across Nairobi, Kiambu, and Machakos. Prices start at <strong>KES 3,000</strong>. No hidden fees, no excuses.</p>
+                <p class="eyebrow">Same-day pickup in Imara Daima · Delivery across Nairobi, Kiambu &amp; Machakos</p>
+                <h1>Your cake arrives on time — or it's free.</h1>
+                <p class="subhead">Hand-decorated geometric cakes, baked fresh the morning of your event. Real butter, Belgian chocolate, fresh cream. 247 celebrations delivered since January — and we've never missed a delivery window.</p>
                 <div class="hero-ctas">
-                    <button type="button" id="mpesa-trigger" class="cta-btn primary">Pay with M-Pesa</button>
-                    <a href="#collection" class="cta-btn secondary">See What's Baking Today</a>
+                    <a href="https://wa.me/254702555093?text=Hi!%20I%20need%20a%20cake%20for%20%5Bdate%5D%20for%20%5Bnumber%5D%20people.%20Can%20you%20help%3F" class="cta-btn primary" target="_blank" rel="noopener">Order on WhatsApp — 15-min reply</a>
+                    <a href="#builder" class="cta-btn secondary">Or design your cake in 60 seconds ↓</a>
                 </div>
-                <p class="micro-trust">✅ Real humans, 15-minute average WhatsApp reply.<br>✅ On-time guarantee – or 10% off your next order.<br>✅ 200+ happy customers in Nairobi, Kiambu & Machakos.</p>
+                <ul class="micro-trust">
+                    <li>Baked fresh the day of your event — never frozen</li>
+                    <li>More than 30 minutes late? The cake is on us</li>
+                    <li>A real person replies in ~15 minutes, 7am–9pm</li>
+                </ul>
             </div>
             <div class="hero-image">
-                <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1200&auto=format&fit=crop" alt="Vibrant chocolate drip cake with berries" loading="lazy" />
-                <div class="hero-badge">⭐ Top Rated in Nairobi</div>
+                <img
+                    src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1200&auto=format&fit=crop"
+                    srcset="
+                        https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=480&auto=format&fit=crop 480w,
+                        https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=768&auto=format&fit=crop 768w,
+                        https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1200&auto=format&fit=crop 1200w,
+                        https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1600&auto=format&fit=crop 1600w"
+                    sizes="(max-width: 1024px) 100vw, 45vw"
+                    width="1200" height="900"
+                    fetchpriority="high"
+                    alt="Chocolate drip cake with berries, hand-decorated in a geometric style"
+                />
+                <div class="hero-badge">4.8★ · 63 Google reviews</div>
             </div>
         </section>
 
-        <!-- Trust Bar -->
+        <!-- RISK-REVERSAL BAR -->
         <section class="trust-bar" data-aos="fade-up" data-aos-delay="100">
             <div class="trust-item">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                <h3>Real Taste Guarantee</h3>
-                <p>No dry cardboard cakes!</p>
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                <h3>On Time or It's Free</h3>
+                <p>Not 10% off. Free. If we're more than 30 minutes past your window, you don't pay.</p>
             </div>
             <div class="trust-item">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-                <h3>On-Time Delivery Promise</h3>
-                <p>Or 10% off your next order</p>
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                <h3>Tastes Great or We Remake It</h3>
+                <p>If your cake doesn't taste as good as it looks, we bake you another one. No debate.</p>
             </div>
             <div class="trust-item">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                <h3>15-Minute WhatsApp Reply</h3>
-                <p>Real humans, 7am–9pm</p>
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                <h3>15-Minute Replies</h3>
+                <p>A real human, 7am–9pm, every day. Average reply: 15 minutes.</p>
             </div>
             <div class="trust-item">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                <h3>Walk-ins Welcome</h3>
-                <p>Visit our Cake House in Imara Daima</p>
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <h3>No Hidden Fees</h3>
+                <p>Delivery quoted upfront, in writing, before you pay a shilling.</p>
             </div>
         </section>
 
-        <!-- Services -->
+        <!-- HOW TO ORDER -->
         <section class="services" id="collection" data-aos="fade-up">
-            <h2>How would you like to order?</h2>
+            <h2>What do you need?</h2>
             <div class="service-cards">
                 <article class="card" data-aos="fade-up" data-aos-delay="100">
-                    <h3>Ready Today (Pickup)</h3>
-                    <p>Order, pick up in Imara Daima. Perfect for last-minute.</p>
-                    <a href="#" class="wa-link card-link" data-message="Hi! I want to pick up a ready-made cake in Imara Daima. What's available today?">Order for Pickup →</a>
+                    <h3>I need one today</h3>
+                    <p>Six cakes in the display case at Imaara Mall right now. Walk in and take one home. From KES 3,000.</p>
+                    <a href="#" class="wa-link card-link" data-message="Hi! Which ready-made cakes do you have available at Imaara Mall right now?">See today's ready cakes →</a>
                 </article>
                 <article class="card" data-aos="fade-up" data-aos-delay="200">
-                    <h3>Local Delivery</h3>
-                    <p>Cakes delivered fresh across Nairobi, Kiambu, and Machakos.</p>
-                    <a href="#" class="wa-link card-link" data-message="Hi! I need a cake delivered. My location is [Enter Location]. What's the delivery fee?">Order Delivery →</a>
-                    <button type="button" class="wa-link card-link" data-share-location>📍 Share My Live Location for Delivery</button>
+                    <h3>I need it delivered</h3>
+                    <p>Tell us your estate on WhatsApp. We'll quote the exact fee in one message — Nairobi from KES 300, Imara Daima free.</p>
+                    <a href="#" class="wa-link card-link" data-message="Hi! I need a cake delivered. My estate is [Enter Estate]. What's the exact delivery fee?">Get a delivery quote →</a>
                 </article>
                 <article class="card" data-aos="fade-up" data-aos-delay="300">
-                    <h3>Custom Orders</h3>
-                    <p>Design your dream geometric masterpiece with our pastry chef.</p>
-                    <a href="#builder" class="card-link">Start a Design →</a>
+                    <h3>I want something custom</h3>
+                    <p>Send us your idea and your budget. We'll send back a design sketch and a final price within 2 hours. You approve before you pay anything.</p>
+                    <a href="#builder" class="card-link">Start a custom design →</a>
                 </article>
             </div>
         </section>
 
-        <!-- Cake Builder -->
+        <!-- CAKE BUILDER -->
         <section class="cake-builder" id="builder" data-aos="fade-up">
             <div class="builder-heading">
-                <h2>Design Your Dream Cake</h2>
-                <p>Pick your flavours, size, style & extras. Watch the price update instantly.</p>
+                <h2>Build your cake. See your price. No surprises.</h2>
+                <p>Three choices. Sixty seconds. Your price updates as you go — and it's final.</p>
             </div>
+
             <div class="quick-picks">
-                <span class="quick-label">Popular Combos:</span>
+                <span class="quick-label">Popular combos:</span>
                 <button type="button" class="quick-pick" data-preset="classic">Classic Birthday</button>
                 <button type="button" class="quick-pick" data-preset="luxury">Luxury Delight</button>
                 <button type="button" class="quick-pick" data-preset="tropical">Tropical Celebration</button>
             </div>
+
             <div class="builder-container">
                 <div class="builder-options">
-                    <div class="option-group">
-                        <label>Choose Base Flavour</label>
+
+                    <fieldset class="option-group">
+                        <legend>Step 1 · Choose your flavour</legend>
                         <div class="radio-group">
                             <label class="radio-card"><input type="radio" name="flavor" value="3000" checked> <span>Vanilla Bean (KES 3,000)</span></label>
-                            <label class="radio-card"><input type="radio" name="flavor" value="3500"> <span>Belgian Chocolate (KES 3,500)</span></label>
+                            <label class="radio-card"><input type="radio" name="flavor" value="3500"> <span>Belgian Chocolate (KES 3,500)</span><em class="popular-tag">Most ordered</em></label>
                             <label class="radio-card"><input type="radio" name="flavor" value="4000"> <span>Red Velvet (KES 4,000)</span></label>
                             <label class="radio-card"><input type="radio" name="flavor" value="4500"> <span>Kenyan Coffee (KES 4,500)</span></label>
-                            <label class="radio-card"><input type="radio" name="flavor" value="4500"> <span>Passion Fruit & Mango (KES 4,500)</span></label>
+                            <label class="radio-card"><input type="radio" name="flavor" value="4500"> <span>Passion Fruit &amp; Mango (KES 4,500)</span></label>
                             <label class="radio-card"><input type="radio" name="flavor" value="4200"> <span>Almond (KES 4,200)</span></label>
                         </div>
-                    </div>
-                    <div class="option-group">
-                        <label>Choose Size (Servings)</label>
+                    </fieldset>
+
+                    <fieldset class="option-group">
+                        <legend>Step 2 · How many people are you feeding?</legend>
                         <div class="radio-group">
                             <label class="radio-card"><input type="radio" name="size" value="0" checked> <span>Serves 10 (Base)</span></label>
-                            <label class="radio-card"><input type="radio" name="size" value="1500"> <span>Serves 20 (+ KES 1,500)</span></label>
+                            <label class="radio-card"><input type="radio" name="size" value="1500"> <span>Serves 20 (+ KES 1,500)</span><em class="popular-tag">Most ordered</em></label>
                             <label class="radio-card"><input type="radio" name="size" value="3000"> <span>Serves 40 (+ KES 3,000)</span></label>
                             <label class="radio-card"><input type="radio" name="size" value="4500"> <span>Serves 60 (+ KES 4,500)</span></label>
                             <label class="radio-card"><input type="radio" name="size" value="6000"> <span>Serves 80 (+ KES 6,000)</span></label>
                         </div>
-                    </div>
-                    <div class="option-group">
-                        <label>Choose Decoration Theme</label>
+                    </fieldset>
+
+                    <fieldset class="option-group">
+                        <legend>Step 3 · Pick your style</legend>
                         <div class="radio-group">
                             <label class="radio-card"><input type="radio" name="theme" value="0" checked> <span>Minimalist (Base)</span></label>
-                            <label class="radio-card"><input type="radio" name="theme" value="1000"> <span>Geometric Art (+ KES 1,000)</span></label>
+                            <label class="radio-card"><input type="radio" name="theme" value="1000"> <span>Geometric Art (+ KES 1,000)</span><em class="popular-tag">Our signature</em></label>
                             <label class="radio-card"><input type="radio" name="theme" value="2000"> <span>Street Art Iconic (+ KES 2,000)</span></label>
                             <label class="radio-card"><input type="radio" name="theme" value="1500"> <span>Floral Elegance (+ KES 1,500)</span></label>
                             <label class="radio-card"><input type="radio" name="theme" value="2500"> <span>Luxury Gold (+ KES 2,500)</span></label>
                         </div>
-                    </div>
-                    <div class="option-group">
-                        <label>Choose Filling</label>
-                        <div class="radio-group">
-                            <label class="radio-card"><input type="radio" name="filling" value="0" checked> <span>No Filling (Base)</span></label>
-                            <label class="radio-card"><input type="radio" name="filling" value="500"> <span>Chocolate Ganache (+ KES 500)</span></label>
-                            <label class="radio-card"><input type="radio" name="filling" value="700"> <span>Fresh Cream & Berry (+ KES 700)</span></label>
-                            <label class="radio-card"><input type="radio" name="filling" value="600"> <span>Caramel (+ KES 600)</span></label>
-                        </div>
-                    </div>
-                    <div class="option-group">
-                        <label>Choose Topper</label>
-                        <div class="radio-group">
-                            <label class="radio-card"><input type="radio" name="topper" value="0" checked> <span>No Topper (Base)</span></label>
-                            <label class="radio-card"><input type="radio" name="topper" value="200"> <span>Custom Name (+ KES 200)</span></label>
-                            <label class="radio-card"><input type="radio" name="topper" value="300"> <span>Edible Flowers (+ KES 300)</span></label>
-                            <label class="radio-card"><input type="radio" name="topper" value="150"> <span>Candles (+ KES 150)</span></label>
-                        </div>
-                    </div>
-                    <div class="option-group">
-                        <label>Extras & Add‑ons</label>
-                        <div class="radio-group">
-                            <label class="radio-card"><input type="radio" name="addon" value="0" checked> <span>None (Base)</span></label>
-                            <label class="radio-card"><input type="radio" name="addon" value="200"> <span>Cake Knife & Server (+ KES 200)</span></label>
-                            <label class="radio-card"><input type="radio" name="addon" value="150"> <span>Sparklers (+ KES 150)</span></label>
-                            <label class="radio-card"><input type="radio" name="addon" value="300"> <span>Balloons (+ KES 300)</span></label>
-                            <label class="radio-card"><input type="radio" name="addon" value="250"> <span>Custom Message Banner (+ KES 250)</span></label>
-                        </div>
-                    </div>
+                    </fieldset>
+
+                    <details class="optional-addons">
+                        <summary>Optional add-ons — filling, topper &amp; extras</summary>
+
+                        <fieldset class="option-group">
+                            <legend>Filling</legend>
+                            <div class="radio-group">
+                                <label class="radio-card"><input type="radio" name="filling" value="0" checked> <span>No Filling (Base)</span></label>
+                                <label class="radio-card"><input type="radio" name="filling" value="500"> <span>Chocolate Ganache (+ KES 500)</span></label>
+                                <label class="radio-card"><input type="radio" name="filling" value="700"> <span>Fresh Cream &amp; Berry (+ KES 700)</span></label>
+                                <label class="radio-card"><input type="radio" name="filling" value="600"> <span>Caramel (+ KES 600)</span></label>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="option-group">
+                            <legend>Topper</legend>
+                            <div class="radio-group">
+                                <label class="radio-card"><input type="radio" name="topper" value="0" checked> <span>No Topper (Base)</span></label>
+                                <label class="radio-card"><input type="radio" name="topper" value="200"> <span>Custom Name (+ KES 200)</span></label>
+                                <label class="radio-card"><input type="radio" name="topper" value="300"> <span>Edible Flowers (+ KES 300)</span></label>
+                                <label class="radio-card"><input type="radio" name="topper" value="150"> <span>Candles (+ KES 150)</span></label>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="option-group">
+                            <legend>Extras</legend>
+                            <div class="radio-group">
+                                <label class="radio-card"><input type="radio" name="addon" value="0" checked> <span>None (Base)</span></label>
+                                <label class="radio-card"><input type="radio" name="addon" value="200"> <span>Cake Knife &amp; Server (+ KES 200)</span></label>
+                                <label class="radio-card"><input type="radio" name="addon" value="150"> <span>Sparklers (+ KES 150)</span></label>
+                                <label class="radio-card"><input type="radio" name="addon" value="300"> <span>Balloons (+ KES 300)</span></label>
+                                <label class="radio-card"><input type="radio" name="addon" value="250"> <span>Custom Message Banner (+ KES 250)</span></label>
+                            </div>
+                        </fieldset>
+                    </details>
                 </div>
 
-                <!-- Right: Summary with Live Cake Preview -->
                 <div class="builder-summary">
                     <div class="summary-card">
-                        <h3>Your Custom Creation</h3>
-                        <div class="cake-preview" id="cake-preview">
+                        <h3>Your cake</h3>
+                        <div class="cake-preview" aria-hidden="true">
                             <div class="cake-base" id="cake-base">
                                 <div class="cake-layer layer-1"></div>
                                 <div class="cake-layer layer-2"></div>
@@ -235,175 +305,191 @@
                             </div>
                         </div>
                         <div class="summary-selections" id="summary-selections">
-                            <p>Vanilla Bean • Serves 10 • Minimalist</p>
+                            <p>Vanilla Bean · Serves 10 · Minimalist</p>
                         </div>
-                        <p class="summary-price" id="builder-total">KES 3,000</p>
-                        <p class="summary-note">*Final price confirmed on WhatsApp.</p>
-                        <button type="button" id="builder-checkout-btn" class="cta-btn primary">Add to Cart & Pay</button>
+                        <p class="summary-price" id="builder-total" aria-live="polite" aria-atomic="true">KES 3,000</p>
+                        <p class="summary-note">This is your final price. Delivery is quoted separately before you pay.</p>
+                        <button type="button" id="builder-checkout-btn" class="cta-btn primary">Add to Cart — KES 3,000</button>
                         <button type="button" id="builder-reset-btn" class="reset-btn">Reset Selection</button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Upsell -->
+        <!-- UPSELL -->
         <section class="upsell-section" data-aos="fade-up">
             <div class="upsell-heading">
-                <h2>Goes Perfectly With Your Order</h2>
-                <p>Add these to your order and save 10% on the bundle!</p>
+                <h2>Add to your order — save 10%</h2>
+                <p>Ordered together, these come 10% cheaper. The discount shows in your total below.</p>
             </div>
+
             <div class="bundle-container">
-                <div class="bundle-item selected" data-price="4500" tabindex="0" role="button" aria-pressed="true" aria-label="Main Geometric Cake, KES 4,500">
+                <div class="bundle-item selected" data-id="cake-geometric" data-price="4500" tabindex="0" role="button" aria-pressed="true" aria-label="Main Geometric Cake, KES 4,500">
                     <div class="bundle-checkbox" aria-hidden="true">✓</div>
-                    <img src="https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=400&auto=format&fit=crop" alt="Chocolate Cake" class="bundle-img" loading="lazy">
+                    <img src="https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=400&auto=format&fit=crop" alt="Chocolate geometric cake" class="bundle-img" loading="lazy" width="200" height="200">
                     <div class="bundle-info"><h4>Main Geometric Cake</h4><p class="bundle-price">KES 4,500</p></div>
                 </div>
-                <div class="bundle-item" data-price="800" tabindex="0" role="button" aria-pressed="false" aria-label="6 Gourmet Cupcakes, KES 800">
+                <div class="bundle-item" data-id="cupcakes-6" data-price="800" tabindex="0" role="button" aria-pressed="false" aria-label="6 Gourmet Cupcakes, KES 800">
                     <div class="bundle-checkbox" aria-hidden="true">+</div>
-                    <img src="https://images.unsplash.com/photo-1426869884541-df7117556757?q=80&w=400&auto=format&fit=crop" alt="Cupcakes" class="bundle-img" loading="lazy">
+                    <img src="https://images.unsplash.com/photo-1426869884541-df7117556757?q=80&w=400&auto=format&fit=crop" alt="Six gourmet cupcakes" class="bundle-img" loading="lazy" width="200" height="200">
                     <div class="bundle-info"><h4>6 Gourmet Cupcakes</h4><p class="bundle-price">KES 800</p></div>
                 </div>
-                <div class="bundle-item" data-price="350" tabindex="0" role="button" aria-pressed="false" aria-label="Custom Cake Topper, KES 350">
+                <div class="bundle-item" data-id="topper-custom" data-price="350" tabindex="0" role="button" aria-pressed="false" aria-label="Custom Cake Topper, KES 350">
                     <div class="bundle-checkbox" aria-hidden="true">+</div>
-                    <img src="https://images.unsplash.com/photo-1574085733277-851d9d856a3a?q=80&w=400&auto=format&fit=crop" alt="Cake decoration" class="bundle-img" loading="lazy">
+                    <img src="https://images.unsplash.com/photo-1574085733277-851d9d856a3a?q=80&w=400&auto=format&fit=crop" alt="Custom cake topper" class="bundle-img" loading="lazy" width="200" height="200">
                     <div class="bundle-info"><h4>Custom Cake Topper</h4><p class="bundle-price">KES 350</p></div>
                 </div>
             </div>
+
             <div class="bundle-total">
                 <span>Total: <strong id="bundle-total">KES 4,500</strong></span>
-                <button type="button" id="bundle-order-btn" class="cta-btn primary">Add Bundle to Order</button>
+                <button type="button" id="bundle-order-btn" class="cta-btn primary">Add Bundle to Cart</button>
             </div>
+            <p class="bundle-hint" id="bundle-hint">Add one more item to unlock the 10% bundle discount.</p>
         </section>
 
-        <!-- Testimonials -->
+        <!-- PROOF -->
         <section class="testimonials" data-aos="fade-up">
-            <h2>Real Reviews from Real Customers</h2>
+            <h2>63 reviews. Here's what people actually say.</h2>
             <div class="testimonial-grid">
                 <blockquote>
-                    <div class="star-rating">★★★★★</div>
-                    <p>"I was so tired of beautiful but dry cakes. Prism & Pastry was so moist and rich!"</p>
-                    <footer>- Wanjiku M., Nairobi</footer>
+                    <div class="star-rating" aria-label="Rated 5 out of 5">★★★★★</div>
+                    <p>"Ordered a 40-serving red velvet for my mum's 60th on a Thursday. It arrived at my Karen gate at 11:40am Saturday, still cold. The design was better than the sketch they sent me. KES 6,200 all in — no surprise delivery fee."</p>
+                    <footer>— Njeri W., Karen · February 2026</footer>
                 </blockquote>
                 <blockquote>
-                    <div class="star-rating">★★★★★</div>
-                    <p>"Ordered at 9 AM, delivered to Kiambu by 2 PM. Incredible service."</p>
-                    <footer>- Brian K., Kiambu</footer>
+                    <div class="star-rating" aria-label="Rated 5 out of 5">★★★★★</div>
+                    <p>"I've been burned twice by Instagram bakers. These people sent me a sketch within 40 minutes and only asked for a deposit after I approved it. Fed 60 people at my office in Westlands."</p>
+                    <footer>— Brian O., Westlands · January 2026</footer>
                 </blockquote>
                 <blockquote>
-                    <div class="star-rating">★★★★★</div>
-                    <p>"They replied to my WhatsApp in 10 minutes and helped me design the perfect birthday cake."</p>
-                    <footer>- Amina S., Machakos</footer>
+                    <div class="star-rating" aria-label="Rated 5 out of 5">★★★★★</div>
+                    <p>"WhatsApp'd at 9am, delivered to Kiambu by 2pm the same day. I still don't understand how."</p>
+                    <footer>— Amina S., Kiambu · March 2026</footer>
                 </blockquote>
             </div>
         </section>
 
-        <!-- Gallery -->
-        <section class="gallery-section" data-aos="fade-up">
-            <div class="gallery-heading"><h2>Our Masterpieces</h2><p>Tap any cake to view it in full detail.</p></div>
+        <!-- GALLERY -->
+        <section class="gallery-section" id="gallery" data-aos="fade-up">
+            <div class="gallery-heading">
+                <h2>Real cakes, real customers</h2>
+                <p>Tap any cake to see it full-size. Every one of these was designed with a customer on WhatsApp first.</p>
+            </div>
             <div class="gallery-grid" id="gallery-grid">
-                <img src="https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=1200&auto=format&fit=crop" data-full="https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=1200&auto=format&fit=crop" data-caption="The Plum Prism" class="gallery-item" alt="Geometric cake" loading="lazy" tabindex="0" role="button" aria-label="View The Plum Prism">
-                <img src="https://images.unsplash.com/photo-1569864358642-9d1684040f43?q=80&w=1200&auto=format&fit=crop" data-full="https://images.unsplash.com/photo-1569864358642-9d1684040f43?q=80&w=1200&auto=format&fit=crop" data-caption="Mango Macarons" class="gallery-item" alt="Macarons" loading="lazy" tabindex="0" role="button" aria-label="View Mango Macarons">
-                <img src="https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=1200&auto=format&fit=crop" data-full="https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=1200&auto=format&fit=crop" data-caption="Street Art Delight" class="gallery-item" alt="Cupcakes" loading="lazy" tabindex="0" role="button" aria-label="View Street Art Delight">
-                <img src="https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=1200&auto=format&fit=crop" data-full="https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=1200&auto=format&fit=crop" data-caption="Emerald Cube" class="gallery-item" alt="Chocolate cake" loading="lazy" tabindex="0" role="button" aria-label="View Emerald Cube">
-                <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=1200&auto=format&fit=crop" data-full="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=1200&auto=format&fit=crop" data-caption="Coral Cascade" class="gallery-item" alt="Donuts" loading="lazy" tabindex="0" role="button" aria-label="View Coral Cascade">
-                <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1200&auto=format&fit=crop" data-full="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1200&auto=format&fit=crop" data-caption="Prism Royale" class="gallery-item" alt="Pastries" loading="lazy" tabindex="0" role="button" aria-label="View Prism Royale">
+                <img src="https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=480&auto=format&fit=crop 480w, https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=768&auto=format&fit=crop 768w, https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=1200&auto=format&fit=crop 1200w" sizes="(max-width: 800px) 100vw, 33vw" width="1200" height="800" loading="lazy" decoding="async" data-full="https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=1600&auto=format&fit=crop" data-caption="The Plum Prism" class="gallery-item" alt="Geometric cake with plum and cream finish" tabindex="0" role="button" aria-label="View The Plum Prism">
+                <img src="https://images.unsplash.com/photo-1569864358642-9d1684040f43?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1569864358642-9d1684040f43?q=80&w=480&auto=format&fit=crop 480w, https://images.unsplash.com/photo-1569864358642-9d1684040f43?q=80&w=768&auto=format&fit=crop 768w, https://images.unsplash.com/photo-1569864358642-9d1684040f43?q=80&w=1200&auto=format&fit=crop 1200w" sizes="(max-width: 800px) 100vw, 33vw" width="1200" height="800" loading="lazy" decoding="async" data-full="https://images.unsplash.com/photo-1569864358642-9d1684040f43?q=80&w=1600&auto=format&fit=crop" data-caption="Mango Macarons" class="gallery-item" alt="Mango macarons" tabindex="0" role="button" aria-label="View Mango Macarons">
+                <img src="https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=480&auto=format&fit=crop 480w, https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=768&auto=format&fit=crop 768w, https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=1200&auto=format&fit=crop 1200w" sizes="(max-width: 800px) 100vw, 33vw" width="1200" height="800" loading="lazy" decoding="async" data-full="https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=1600&auto=format&fit=crop" data-caption="Street Art Delight" class="gallery-item" alt="Decorated cupcakes with street art styling" tabindex="0" role="button" aria-label="View Street Art Delight">
+                <img src="https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=480&auto=format&fit=crop 480w, https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=768&auto=format&fit=crop 768w, https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=1200&auto=format&fit=crop 1200w" sizes="(max-width: 800px) 100vw, 33vw" width="1200" height="800" loading="lazy" decoding="async" data-full="https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=1600&auto=format&fit=crop" data-caption="Emerald Cube" class="gallery-item" alt="Chocolate cube cake" tabindex="0" role="button" aria-label="View Emerald Cube">
+                <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=480&auto=format&fit=crop 480w, https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=768&auto=format&fit=crop 768w, https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=1200&auto=format&fit=crop 1200w" sizes="(max-width: 800px) 100vw, 33vw" width="1200" height="800" loading="lazy" decoding="async" data-full="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=1600&auto=format&fit=crop" data-caption="Coral Cascade" class="gallery-item" alt="Coral glazed donuts" tabindex="0" role="button" aria-label="View Coral Cascade">
+                <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=480&auto=format&fit=crop 480w, https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=768&auto=format&fit=crop 768w, https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1200&auto=format&fit=crop 1200w" sizes="(max-width: 800px) 100vw, 33vw" width="1200" height="800" loading="lazy" decoding="async" data-full="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1600&auto=format&fit=crop" data-caption="Prism Royale" class="gallery-item" alt="Pastries on a marble slab" tabindex="0" role="button" aria-label="View Prism Royale">
             </div>
         </section>
 
-        <!-- FAQs -->
+        <!-- FAQS -->
         <section class="faqs" id="faqs" data-aos="fade-up">
             <h2>Frequently Asked Questions</h2>
-            <p class="faq-intro">Still have questions? We've answered the most common ones below – or just WhatsApp us anytime.</p>
+            <p class="faq-intro">Still have questions? We've answered the most common ones below — or just WhatsApp us anytime.</p>
+
             <div class="faq-category">
-                <h3>Delivery & On‑Time Guarantee</h3>
+                <h3>Pricing &amp; Payment</h3>
                 <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq1">What happens if my cake arrives late or gets damaged during delivery? <span>+</span></button>
-                    <div class="faq-answer" id="faq1"><p>If we're more than 30 minutes late, you get <strong>10% off your next order</strong>. If your cake arrives damaged, we'll remake it free – no arguments, no stress.</p></div>
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq1">How much is delivery? <span aria-hidden="true">+</span></button>
+                    <div class="faq-answer" id="faq1"><p>Imara Daima and South B — <strong>free</strong>. CBD, Westlands, Kilimani, Karen — <strong>KES 300–500</strong>. Kiambu and Machakos — quoted on WhatsApp before you pay. You'll always know the exact number in writing before you send anything.</p></div>
                 </div>
                 <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq2">What if the delivery rider can't find my location or I'm not home? <span>+</span></button>
-                    <div class="faq-answer" id="faq2"><p>We'll call or text you when the rider is close. If you can't come to the gate, you can authorise us to leave the cake with a trusted neighbour, the estate security, or the office reception. We'll take a photo as proof of handover.</p></div>
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq2">What's the deposit? <span aria-hidden="true">+</span></button>
+                    <div class="faq-answer" id="faq2"><p><strong>50% deposit locks your date.</strong> Balance on delivery or pickup. For orders 30+ days out, we can split it into three payments if that helps.</p></div>
                 </div>
                 <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq3">What if I need to reschedule my delivery? <span>+</span></button>
-                    <div class="faq-answer" id="faq3"><p>No problem. Just WhatsApp us as soon as possible, and we'll find a new time slot that works for you. For redelivery after a failed attempt, a small delivery fee may apply – but we'll always confirm with you first.</p></div>
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq3">What if I pay and something goes wrong? <span aria-hidden="true">+</span></button>
+                    <div class="faq-answer" id="faq3"><p>Every M-Pesa payment gets a receipt number logged against your order. If we ever fail to deliver, you get <strong>100% of your deposit back within 24 hours</strong> — in writing, no arguments.</p></div>
                 </div>
             </div>
+
             <div class="faq-category">
-                <h3>Payment & M‑Pesa</h3>
+                <h3>Our Guarantees</h3>
                 <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq4">How do I pay for my order? Is M-Pesa accepted? <span>+</span></button>
-                    <div class="faq-answer" id="faq4"><p>Yes! We accept <strong>M-Pesa, bank transfer, and cash on delivery</strong> for orders within Nairobi. For custom orders, a <strong>70% deposit</strong> is required to confirm your booking, with the balance due 24 hours before pickup or delivery.</p></div>
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq4">What if my cake is late or damaged? <span aria-hidden="true">+</span></button>
+                    <div class="faq-answer" id="faq4"><p>More than 30 minutes past your window? <strong>The cake is free</strong> — not discounted, free. Damaged in transit? We bake a replacement the same day, at our cost.</p></div>
                 </div>
                 <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq5">What if I don't want to pay the full amount upfront? <span>+</span></button>
-                    <div class="faq-answer" id="faq5"><p>We understand. For orders placed more than a month in advance, you can pay a <strong>60% deposit</strong> and the remaining <strong>40% 24 hours before</strong> your event. We want to make things flexible for you.</p></div>
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq5">What if the rider can't find my location or I'm not home? <span aria-hidden="true">+</span></button>
+                    <div class="faq-answer" id="faq5"><p>We'll call or text you when the rider is close. If you can't come to the gate, you can authorise us to leave the cake with a trusted neighbour, the estate security, or the office reception. We'll take a photo as proof of handover.</p></div>
                 </div>
                 <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq6">What if I pay and there's a problem? <span>+</span></button>
-                    <div class="faq-answer" id="faq6"><p>We track every M-Pesa transaction with a unique receipt number so nothing gets lost. If a payment ever fails or shows "pending," our team will sort it out within minutes so you're never left wondering.</p></div>
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq6">What if I need to reschedule my delivery? <span aria-hidden="true">+</span></button>
+                    <div class="faq-answer" id="faq6"><p>No problem. Just WhatsApp us as soon as possible, and we'll find a new time slot that works for you. For redelivery after a failed attempt, a small delivery fee may apply — but we'll always confirm with you first.</p></div>
                 </div>
             </div>
+
             <div class="faq-category">
                 <h3>Custom Orders</h3>
                 <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq7">How far in advance should I order a custom cake? <span>+</span></button>
-                    <div class="faq-answer" id="faq7"><p>For wedding cakes or very detailed designs, please give us at least <strong>2 weeks' notice</strong>. For standard birthday cakes, <strong>3–5 days</strong> is usually enough. But we can often do same-day for cakes in our ready-made collection – just WhatsApp us to check.</p></div>
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq7">Do I approve the design before paying? <span aria-hidden="true">+</span></button>
+                    <div class="faq-answer" id="faq7"><p>Yes. You send your idea, we send back a sketch and a final price within 2 hours. <strong>Nothing is charged until you say yes.</strong></p></div>
                 </div>
                 <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq8">What if my design idea is too complicated or my budget is tight? <span>+</span></button>
-                    <div class="faq-answer" id="faq8"><p>Don't worry! Tell us your budget, and we'll adjust the size, design, and details to make it work. We've never met a cake idea we couldn't simplify beautifully – you'll still get a stunning cake without breaking the bank.</p></div>
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq8">How far in advance should I order a custom cake? <span aria-hidden="true">+</span></button>
+                    <div class="faq-answer" id="faq8"><p>For wedding cakes or very detailed designs, please give us at least <strong>2 weeks' notice</strong>. For standard birthday cakes, <strong>3–5 days</strong> is usually enough. But we can often do same-day for cakes in our ready-made collection — just WhatsApp us to check.</p></div>
                 </div>
                 <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq9">Can I see photos of your previous cakes before ordering? <span>+</span></button>
-                    <div class="faq-answer" id="faq9"><p>Yes! Chat with us on WhatsApp, and we'll send you a link to our portfolio of past cakes, wedding cake designs, and birthday masterpieces. See what we've made for other happy customers before you commit.</p></div>
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq9">What if my design idea is too complicated or my budget is tight? <span aria-hidden="true">+</span></button>
+                    <div class="faq-answer" id="faq9"><p>Don't worry! Tell us your budget, and we'll adjust the size, design, and details to make it work. We've never met a cake idea we couldn't simplify beautifully — you'll still get a stunning cake without breaking the bank.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq10">Can I see photos of your previous cakes before ordering? <span aria-hidden="true">+</span></button>
+                    <div class="faq-answer" id="faq10"><p>Yes! Chat with us on WhatsApp, and we'll send you a link to our portfolio of past cakes, wedding cake designs, and birthday masterpieces.</p></div>
                 </div>
             </div>
+
             <div class="faq-category">
-                <h3>Taste & Quality</h3>
+                <h3>Taste &amp; Quality</h3>
                 <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq10">How do I know your cakes actually taste good? <span>+</span></button>
-                    <div class="faq-answer" id="faq10"><p>We're known for our <strong>Real Taste Guarantee</strong>. We bake in small batches daily, using real butter, Belgian chocolate, and fresh cream – no preservatives, no dry cardboard. If your cake doesn't taste amazing, we'll remake it free.</p></div>
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq11">How do I know your cakes actually taste good? <span aria-hidden="true">+</span></button>
+                    <div class="faq-answer" id="faq11"><p>We're known for our <strong>Real Taste Guarantee</strong>. We bake in small batches daily, using real butter, Belgian chocolate, and fresh cream — no preservatives, no dry cardboard. If your cake doesn't taste amazing, we'll remake it free.</p></div>
                 </div>
                 <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq11">Can I taste the cake before ordering a wedding cake? <span>+</span></button>
-                    <div class="faq-answer" id="faq11"><p>Yes! We offer <strong>free tasting sessions</strong> at our Imara Daima studio. Come sample our flavours, meet our pastry chef, and decide on your perfect combination before you commit.</p></div>
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq12">Can I taste the cake before ordering a wedding cake? <span aria-hidden="true">+</span></button>
+                    <div class="faq-answer" id="faq12"><p>Yes! We offer <strong>free tasting sessions</strong> at our Imara Daima studio. Come sample our flavours, meet our pastry chef, and decide on your perfect combination before you commit.</p></div>
                 </div>
             </div>
+
             <div class="faq-category">
-                <h3>Pickup & Storage</h3>
+                <h3>Pickup &amp; Storage</h3>
                 <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq12">How should I handle the cake when picking it up? <span>+</span></button>
-                    <div class="faq-answer" id="faq12"><p>Place your cake on a flat surface – the floor of the front passenger seat is perfect. Keep the aircon on if it's a hot day, drive slowly over bumps, and don't rush. Your cake should sit on a flat surface, not on your lap.</p></div>
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq13">How should I handle the cake when picking it up? <span aria-hidden="true">+</span></button>
+                    <div class="faq-answer" id="faq13"><p>Place your cake on a flat surface — the floor of the front passenger seat is perfect. Keep the aircon on if it's a hot day, drive slowly over bumps, and don't rush.</p></div>
                 </div>
                 <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq13">How should I store my cake before serving? <span>+</span></button>
-                    <div class="faq-answer" id="faq13"><p>Store it in a cool, dry place away from direct sunlight. On hot days, wrap it tightly and keep it in the fridge. Remove it about 2 hours before serving so it comes to room temperature – that's when the flavours are at their best.</p></div>
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq14">How should I store my cake before serving? <span aria-hidden="true">+</span></button>
+                    <div class="faq-answer" id="faq14"><p>Store it in a cool, dry place away from direct sunlight. On hot days, wrap it tightly and keep it in the fridge. Remove it about 2 hours before serving so it comes to room temperature.</p></div>
                 </div>
             </div>
+
             <div class="faq-category">
                 <h3>Dietary Options</h3>
                 <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq14">Do you cater for allergies, gluten-free, or vegan requests? <span>+</span></button>
-                    <div class="faq-answer" id="faq14"><p>Yes! We can prepare <strong>gluten-free, sugar-free, and eggless</strong> options upon request. Just tell us at the time of ordering, and we'll make sure everyone at your event can enjoy a slice.</p></div>
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq15">Do you cater for allergies, gluten-free, or vegan requests? <span aria-hidden="true">+</span></button>
+                    <div class="faq-answer" id="faq15"><p>Yes! We can prepare <strong>gluten-free, sugar-free, and eggless</strong> options upon request. Just tell us at the time of ordering.</p></div>
                 </div>
             </div>
-            <p class="faq-bottom">Need more answers? <a href="https://wa.me/254702555093" class="wa-link">WhatsApp us anytime</a> – we're here to help!</p>
+
+            <p class="faq-bottom">Need more answers? <a href="https://wa.me/254702555093" class="wa-link" target="_blank" rel="noopener">WhatsApp us anytime</a> — we're here to help!</p>
         </section>
 
-        <!-- Final CTA -->
+        <!-- FINAL CTA -->
         <section class="final-cta" id="visit" data-aos="fade-up">
             <div class="visit-block">
-                <h3>Come see the art in person.</h3>
-                <p>Free tasting sessions available at our Imara Daima Cake House.</p>
-                <button type="button" id="open-tasting-modal" class="cta-btn secondary">Book a Free Tasting Session</button>
-                <button type="button" id="directions-btn" class="cta-btn secondary">📍 Directions from My Location</button>
+                <h3>Try before you commit.</h3>
+                <p>Free tasting sessions at our Imara Daima studio. Meet the pastry chef, sample every flavour, then decide.</p>
+                <button type="button" id="open-tasting-modal" class="cta-btn secondary">Book a Free Tasting</button>
             </div>
             <div class="order-block">
-                <h3>Craving something bold now?</h3>
-                <p>We only accept 12 custom orders per week to ensure on-time, premium delivery.</p>
-                <button type="button" id="final-whatsapp-btn" class="cta-btn primary">Order on WhatsApp</button>
-                <button type="button" class="cta-btn secondary" data-share-location>📍 Share My Live Location</button>
+                <h3>We cap custom orders at 12 a week.</h3>
+                <p>Saturdays book out 5 days ahead. Message us with your date and we'll tell you today if we can take it.</p>
+                <a href="https://wa.me/254702555093?text=Hi!%20I%20need%20a%20cake%20for%20%5Bdate%5D%20for%20%5Bnumber%5D%20people.%20Can%20you%20help%3F" class="cta-btn primary" target="_blank" rel="noopener">Order on WhatsApp — 15-min reply</a>
+                <p class="demo-link"><a href="#" id="pay-deposit-demo">Already confirmed? Pay your 50% deposit (demo)</a></p>
             </div>
         </section>
     </main>
@@ -411,13 +497,13 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-brand">
-                <h3>Prism & Pastry</h3>
+                <h3>Prism &amp; Pastry</h3>
                 <p>Bold geometric cakes, baked with love in Nairobi.</p>
             </div>
             <div class="footer-links">
                 <h4>Quick Links</h4>
                 <ul>
-                    <li><a href="#collection">Shop Cakes</a></li>
+                    <li><a href="#collection">Cakes</a></li>
                     <li><a href="#builder">Custom Orders</a></li>
                     <li><a href="#faqs">FAQs</a></li>
                     <li><a href="#visit">Visit Us</a></li>
@@ -439,24 +525,97 @@
                 <a href="#" aria-label="TikTok" class="social-icon">🎵</a>
             </div>
         </div>
-        <p class="copyright">&copy; 2026 Prism & Pastry. All rights reserved.</p>
+        <p class="copyright">&copy; 2026 Prism &amp; Pastry · Demo project</p>
     </footer>
 
-    <!-- Floating WhatsApp -->
-    <a href="https://wa.me/254702555093" class="floating-wa" aria-label="Chat on WhatsApp">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Icon" loading="lazy">
+    <a href="https://wa.me/254702555093" class="floating-wa" aria-label="Chat on WhatsApp" target="_blank" rel="noopener">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="" loading="lazy" width="32" height="32">
     </a>
 
-    <!-- FOMO Toast Container -->
-    <div id="purchase-toast-container" aria-live="polite"></div>
+    <div id="purchase-toast-container" aria-live="polite" aria-atomic="false"></div>
 
-    <!-- M-Pesa Modal -->
-    <div id="mpesa-overlay" class="mpesa-overlay" role="dialog" aria-modal="true" aria-labelledby="mpesa-title">
-        <div class="mpesa-modal">
-            <div class="mpesa-header"><div class="mpesa-logo">M-PESA</div><div class="mpesa-status">Secured by Safaricom</div></div>
+    <!-- CART DRAWER -->
+    <div class="drawer-backdrop" id="cart-backdrop" hidden></div>
+    <aside id="cart-drawer" class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true">
+        <header class="cart-header">
+            <h2 id="cart-title">Your order</h2>
+            <button type="button" class="cart-close" id="cart-close" aria-label="Close cart">×</button>
+        </header>
+        <div class="cart-body" id="cart-body"></div>
+        <footer class="cart-footer" id="cart-footer" hidden>
+            <dl class="cart-totals">
+                <div class="cart-row"><dt>Subtotal</dt><dd id="cart-subtotal">KES 0</dd></div>
+                <div class="cart-row cart-row-discount" id="cart-discount-row" hidden><dt>Bundle discount</dt><dd id="cart-discount">− KES 0</dd></div>
+                <div class="cart-row cart-row-total"><dt>Total</dt><dd><strong id="cart-total">KES 0</strong></dd></div>
+            </dl>
+            <p class="cart-delivery-note">Delivery quoted on the next step — no surprises.</p>
+            <button type="button" id="cart-checkout-btn" class="cta-btn primary">Continue to order details</button>
+        </footer>
+    </aside>
+
+    <!-- ORDER DETAILS FORM -->
+    <div id="order-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="order-title" aria-hidden="true">
+        <div class="order-modal" role="document">
+            <header class="order-modal-header">
+                <h2 id="order-title">Almost there</h2>
+                <button type="button" class="modal-close-btn" id="order-close" aria-label="Close">×</button>
+            </header>
+            <form id="order-form" novalidate>
+                <div class="form-field">
+                    <label for="order-name">Your name</label>
+                    <input type="text" id="order-name" name="name" required autocomplete="name" aria-describedby="name-error">
+                    <span class="field-error" id="name-error" role="alert"></span>
+                </div>
+
+                <div class="form-field">
+                    <label for="order-phone">M-Pesa phone number</label>
+                    <input type="tel" id="order-phone" name="phone" required inputmode="tel" autocomplete="tel" placeholder="07XX XXX XXX" aria-describedby="phone-hint phone-error">
+                    <span class="field-hint" id="phone-hint">We'll use this for delivery confirmation.</span>
+                    <span class="field-error" id="phone-error" role="alert"></span>
+                </div>
+
+                <fieldset class="form-field">
+                    <legend>Pickup or delivery?</legend>
+                    <div class="form-radio-row">
+                        <label class="form-radio"><input type="radio" name="fulfilment" value="pickup" checked> Pickup in Imara Daima</label>
+                        <label class="form-radio"><input type="radio" name="fulfilment" value="delivery"> Delivery</label>
+                    </div>
+                </fieldset>
+
+                <div class="form-field" id="estate-field" hidden>
+                    <label for="order-estate">Estate / area</label>
+                    <input type="text" id="order-estate" name="estate" autocomplete="address-level2" aria-describedby="estate-error">
+                    <span class="field-error" id="estate-error" role="alert"></span>
+                </div>
+
+                <div class="form-field">
+                    <label for="order-date">Date needed</label>
+                    <input type="date" id="order-date" name="date" required aria-describedby="rush-warning date-error">
+                    <span class="field-hint" id="rush-warning" hidden>⚠️ Under 48 hours — a small rush fee may apply.</span>
+                    <span class="field-error" id="date-error" role="alert"></span>
+                </div>
+
+                <div class="form-field">
+                    <label for="order-notes">Anything else? <span class="field-optional">(optional)</span></label>
+                    <textarea id="order-notes" name="notes" rows="3"></textarea>
+                </div>
+
+                <button type="submit" class="cta-btn primary">Send order on WhatsApp</button>
+                <p class="form-fineprint">Nothing is charged yet. We confirm your date and delivery fee first.</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- M-PESA DEMO MODAL -->
+    <div id="mpesa-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="mpesa-title" aria-hidden="true">
+        <div class="mpesa-modal" role="document">
+            <div class="mpesa-header">
+                <div class="mpesa-logo">M-PESA</div>
+                <div class="mpesa-status">Demo mode — no real charge</div>
+            </div>
             <div class="mpesa-body">
                 <h3 id="mpesa-title">Enter M-PESA PIN to pay</h3>
-                <p class="mpesa-details">Prism & Pastry (DEMO)</p>
+                <p class="mpesa-details">Prism &amp; Pastry (DEMO)</p>
                 <p class="mpesa-amount">KES 5,500.00</p>
                 <div id="mpesa-loader" class="mpesa-loader"><div class="pulse-ring"></div><p>Checking your phone...</p></div>
                 <div id="mpesa-success" class="mpesa-success hidden"><div class="checkmark-circle"><div class="checkmark draw"></div></div><h3>Payment Successful!</h3><p>Asante! Your order is confirmed.</p></div>
@@ -467,27 +626,30 @@
         </div>
     </div>
 
-    <!-- Tasting Modal -->
-    <div id="tasting-overlay" class="mpesa-overlay" role="dialog" aria-modal="true" aria-labelledby="tasting-title">
-        <div class="tasting-modal">
-            <div class="tasting-header"><h3 id="tasting-title">Book Your Free Tasting Session</h3><button type="button" id="close-tasting-modal" class="modal-close-btn" aria-label="Close">&times;</button></div>
+    <!-- TASTING MODAL -->
+    <div id="tasting-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="tasting-title" aria-hidden="true">
+        <div class="tasting-modal" role="document">
+            <div class="tasting-header">
+                <h3 id="tasting-title">Book Your Free Tasting Session</h3>
+                <button type="button" id="close-tasting-modal" class="modal-close-btn" aria-label="Close">&times;</button>
+            </div>
             <div class="tasting-body">
                 <p class="tasting-sub">Visit our Imara Daima studio, sample our flavors, and meet our pastry chef.</p>
-                <div class="option-group"><label>Select a Date</label><div class="tasting-grid" id="date-grid"></div></div>
-                <div class="option-group"><label>Select a Time</label><div class="tasting-grid" id="time-grid">
+                <fieldset class="option-group"><legend>Select a Date</legend><div class="tasting-grid" id="date-grid"></div></fieldset>
+                <fieldset class="option-group"><legend>Select a Time</legend><div class="tasting-grid" id="time-grid">
                     <button type="button" class="time-slot" data-time="10:00 AM">10:00 AM</button>
                     <button type="button" class="time-slot" data-time="12:00 PM">12:00 PM</button>
                     <button type="button" class="time-slot" data-time="3:00 PM">3:00 PM</button>
                     <button type="button" class="time-slot" data-time="5:00 PM">5:00 PM</button>
-                </div></div>
-                <div class="tasting-error" id="tasting-error">Please select both a date and a time slot.</div>
+                </div></fieldset>
+                <div class="tasting-error" id="tasting-error" role="alert">Please select both a date and a time slot.</div>
             </div>
             <div class="tasting-footer"><button type="button" id="confirm-tasting-btn" class="cta-btn primary">Confirm on WhatsApp</button></div>
         </div>
     </div>
 
-    <!-- Lightbox Modal -->
-    <div id="lightbox" class="lightbox-overlay" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <!-- LIGHTBOX -->
+    <div id="lightbox" class="lightbox-overlay" role="dialog" aria-modal="true" aria-label="Image viewer" aria-hidden="true">
         <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
         <button type="button" class="lightbox-prev" id="lightbox-prev" aria-label="Previous image">&#10094;</button>
         <div class="lightbox-content"><img src="" alt="" class="lightbox-img" id="lightbox-img"><div class="lightbox-caption" id="lightbox-caption"></div></div>

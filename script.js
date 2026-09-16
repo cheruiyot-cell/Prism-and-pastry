@@ -1,596 +1,1137 @@
-/* =========================================
-   PRISM & PASTRY - PREMIUM LOGIC
-========================================= */
+/* =========================================================
+   PRISM & PASTRY — v3
+   - Cart drawer with localStorage persistence
+   - Order details form with Kenyan phone validation
+   - Focus traps for all modals
+   - aria-live announcements
+   - respects prefers-reduced-motion
+========================================================= */
 
-// 1. Initialize AOS
-document.addEventListener('DOMContentLoaded', () => {
-  AOS.init({ duration: 800, easing: 'ease-in-out', once: true });
-});
+(function () {
+  'use strict';
 
-// 2. Preloader Logic
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    const preloader = document.getElementById('preloader');
-    if (preloader) {
-      preloader.classList.add('hidden');
-      setTimeout(() => { preloader.remove(); AOS.refresh(); }, 500);
-    }
-  }, 1200);
-});
+  const WHATSAPP_NUMBER = '254702555093';
+  const WA_BASE = `https://wa.me/${WHATSAPP_NUMBER}`;
+  const CART_KEY = 'pp_cart_v1';
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Safety timeout
-setTimeout(() => {
-  const preloader = document.getElementById('preloader');
-  if (preloader) preloader.classList.add('hidden');
-}, 3000);
+  // ---------- Utilities ----------
+  const $ = (sel, ctx = document) => ctx.querySelector(sel);
+  const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
-// 3. Scroll Progress Bar
-const scrollProgress = document.getElementById('scroll-progress');
-window.addEventListener('scroll', () => {
-  const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
-  const progress = (window.scrollY / totalScroll) * 100;
-  scrollProgress.style.width = `${progress}%`;
-});
-
-// 4. Mobile Menu Toggle
-const menuToggle = document.getElementById('menu-toggle');
-const navLinks = document.getElementById('nav-links');
-const header = document.querySelector('.site-header');
-
-menuToggle.addEventListener('click', (e) => {
-  e.stopPropagation();
-  navLinks.classList.toggle('active');
-  menuToggle.setAttribute('aria-expanded', navLinks.classList.contains('active'));
-});
-
-document.addEventListener('click', (e) => {
-  if (navLinks.classList.contains('active') && !navLinks.contains(e.target) && e.target !== menuToggle) {
-    navLinks.classList.remove('active');
-    menuToggle.setAttribute('aria-expanded', 'false');
+  function kes(n) {
+    return `KES ${Number(n).toLocaleString('en-KE')}`;
   }
-});
 
-navLinks.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => {
-    navLinks.classList.remove('active');
-    menuToggle.setAttribute('aria-expanded', 'false');
+  function openWhatsApp(message) {
+    const url = message ? `${WA_BASE}?text=${encodeURIComponent(message)}` : WA_BASE;
+    window.open(url, '_blank', 'noopener');
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, (c) => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[c]));
+  }
+
+  // Focus trap helper
+  function makeFocusTrap(container) {
+    const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    let previouslyFocused = null;
+    let active = false;
+
+    const getFocusable = () =>
+      $$(FOCUSABLE, container).filter((el) => el.offsetParent !== null && !el.hasAttribute('inert'));
+
+    function onKeydown(e) {
+      if (e.key !== 'Tab' || !active) return;
+      const items = getFocusable();
+      if (!items.length) {
+        e.preventDefault();
+        return;
+      }
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    return {
+      activate() {
+        if (active) return;
+        active = true;
+        previouslyFocused = document.activeElement;
+        container.setAttribute('aria-hidden', 'false');
+        document.addEventListener('keydown', onKeydown, true);
+        document.body.style.overflow = 'hidden';
+        requestAnimationFrame(() => {
+          const items = getFocusable();
+          (items[0] || container).focus({ preventScroll: true });
+        });
+      },
+      deactivate() {
+        if (!active) return;
+        active = false;
+        container.setAttribute('aria-hidden', 'true');
+        document.removeEventListener('keydown', onKeydown, true);
+        document.body.style.overflow = '';
+        if (previouslyFocused && previouslyFocused.focus) {
+          previouslyFocused.focus({ preventScroll: true });
+        }
+      }
+    };
+  }
+
+  // ---------- AOS ----------
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.AOS) {
+      window.AOS.init({
+        duration: 800,
+        easing: 'ease-in-out',
+        once: true,
+        disable: prefersReducedMotion
+      });
+    }
   });
-});
 
-// 5. Header Shadow
-const siteHeader = document.getElementById('site-header');
-window.addEventListener('scroll', () => {
-  siteHeader.style.boxShadow = window.scrollY > 50 ? '0 4px 12px rgba(0,0,0,0.1)' : 'none';
-});
-
-// 6. FAQ Accordion
-document.querySelectorAll('.faq-item').forEach(item => {
-  item.querySelector('.faq-question').addEventListener('click', () => {
-    document.querySelectorAll('.faq-item').forEach(i => {
-      i.classList.remove('active');
-      i.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
-    });
-    item.classList.add('active');
-    item.querySelector('.faq-question').setAttribute('aria-expanded', 'true');
-  });
-});
-
-// 7. Smart WhatsApp Routing (excluding location-share buttons)
-document.querySelectorAll('.wa-link:not([data-share-location])').forEach(link => {
-  link.addEventListener('click', function(e) {
-    e.preventDefault();
-    const message = this.dataset.message;
-    if (message) window.open(`https://wa.me/254702555093?text=${encodeURIComponent(message)}`, '_blank');
-  });
-});
-
-// 8. M-Pesa STK Push Simulation
-const mpesaOverlay = document.getElementById('mpesa-overlay');
-const mpesaLoader = document.getElementById('mpesa-loader');
-const mpesaSuccess = document.getElementById('mpesa-success');
-const mpesaError = document.getElementById('mpesa-error');
-const mpesaAmount = document.querySelector('.mpesa-amount');
-const mpesaClose = document.getElementById('mpesa-close');
-const mpesaCancel = document.getElementById('mpesa-cancel');
-
-let mpesaTimeout;
-
-function triggerMpesaPayment(amount) {
-  mpesaOverlay.classList.add('active');
-  mpesaLoader.classList.remove('hidden');
-  mpesaSuccess.classList.add('hidden');
-  mpesaError.classList.add('hidden');
-  if (mpesaAmount) mpesaAmount.textContent = `KES ${amount.toLocaleString()}.00`;
-
-  mpesaTimeout = setTimeout(() => {
-    mpesaLoader.classList.add('hidden');
-    mpesaSuccess.classList.remove('hidden');
+  // ---------- Preloader ----------
+  function hidePreloader() {
+    const preloader = $('#preloader');
+    if (!preloader || preloader.classList.contains('hidden')) return;
+    preloader.classList.add('hidden');
     setTimeout(() => {
-      mpesaOverlay.classList.remove('active');
-      window.open(`https://wa.me/254702555093?text=Hi!%20I%20just%20completed%20a%20KES%20${amount}%20demo%20payment.%20Please%20confirm%20my%20order.`, '_blank');
-    }, 2000);
-  }, 2500);
-}
-
-document.getElementById('mpesa-trigger').addEventListener('click', (e) => { e.preventDefault(); triggerMpesaPayment(4500); });
-
-document.getElementById('final-whatsapp-btn').addEventListener('click', () => {
-  window.open('https://wa.me/254702555093?text=Hi!%20I%20want%20to%20order%20a%20cake.', '_blank');
-});
-
-if (mpesaClose) mpesaClose.addEventListener('click', () => {
-  mpesaOverlay.classList.remove('active');
-  clearTimeout(mpesaTimeout);
-});
-if (mpesaCancel) mpesaCancel.addEventListener('click', () => {
-  clearTimeout(mpesaTimeout);
-  mpesaLoader.classList.add('hidden');
-  mpesaSuccess.classList.add('hidden');
-  mpesaError.classList.remove('hidden');
-  setTimeout(() => { mpesaOverlay.classList.remove('active'); mpesaError.classList.add('hidden'); }, 1500);
-});
-
-mpesaOverlay.addEventListener('click', (e) => {
-  if (e.target === mpesaOverlay) {
-    mpesaOverlay.classList.remove('active');
-    clearTimeout(mpesaTimeout);
+      if (preloader.parentNode) preloader.remove();
+      if (window.AOS) window.AOS.refresh();
+    }, 500);
   }
-});
+  window.addEventListener('load', () => setTimeout(hidePreloader, 900));
+  setTimeout(hidePreloader, 3000);
 
-// 9. Upsell Logic
-const bundleItems = document.querySelectorAll('.bundle-item');
-const bundleTotalEl = document.getElementById('bundle-total');
-const bundleOrderBtn = document.getElementById('bundle-order-btn');
-let currentBundlePrice = 0;
-
-function updateBundleTotal() {
-  let total = 0;
-  bundleItems.forEach(item => {
-    if (item.classList.contains('selected')) {
-      total += parseInt(item.dataset.price);
-    }
-  });
-  currentBundlePrice = total;
-  bundleTotalEl.textContent = `KES ${total.toLocaleString()}`;
-}
-
-bundleItems.forEach(item => {
-  item.addEventListener('click', () => {
-    item.classList.toggle('selected');
-    // Update checkbox symbol
-    const checkbox = item.querySelector('.bundle-checkbox');
-    if (item.classList.contains('selected')) {
-      checkbox.textContent = '✓';
-      item.setAttribute('aria-pressed', 'true');
-    } else {
-      checkbox.textContent = '+';
-      item.setAttribute('aria-pressed', 'false');
-    }
-    updateBundleTotal();
-  });
-  item.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      item.click();
-    }
-  });
-});
-
-if (bundleOrderBtn) bundleOrderBtn.addEventListener('click', () => {
-  if (currentBundlePrice > 0) {
-    triggerMpesaPayment(currentBundlePrice);
+  // ---------- Scroll progress ----------
+  const scrollProgress = $('#scroll-progress');
+  if (scrollProgress) {
+    window.addEventListener('scroll', () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      if (total > 0) {
+        scrollProgress.style.width = `${(window.scrollY / total) * 100}%`;
+      }
+    }, { passive: true });
   }
-});
-updateBundleTotal();
 
-// 10. Cake Builder Logic (Enhanced with Animations)
-const builderInputs = document.querySelectorAll('input[type="radio"]');
-const builderTotalEl = document.getElementById('builder-total');
-const builderCheckoutBtn = document.getElementById('builder-checkout-btn');
-const builderResetBtn = document.getElementById('builder-reset-btn');
-const summarySelections = document.getElementById('summary-selections');
-const quickPickBtns = document.querySelectorAll('.quick-pick');
-const cakeLayer1 = document.querySelector('.layer-1');
-const cakeLayer2 = document.querySelector('.layer-2');
-const cakeLayer3 = document.querySelector('.layer-3');
-const cakeFrosting = document.getElementById('cake-frosting');
-const cakeTopper = document.getElementById('cake-topper');
-
-// Flavor colors
-const flavorColors = {
-  '3000': '#f5c6c6', // Vanilla
-  '3500': '#8b5a2b', // Chocolate
-  '4000': '#c0392b', // Red Velvet
-  '4500': '#6f4e37', // Kenyan Coffee
-  '4200': '#f0d9b5'  // Almond
-};
-
-// Function to get selected options
-function getSelectedOptions() {
-  const selected = {};
-  builderInputs.forEach(input => {
-    if (input.checked) {
-      const name = input.name;
-      const label = input.closest('.radio-card').querySelector('span').textContent.trim();
-      selected[name] = { value: input.value, label };
-    }
-  });
-  return selected;
-}
-
-// Update radio card classes
-function updateRadioCardClasses() {
-  builderInputs.forEach(input => {
-    const card = input.closest('.radio-card');
-    if (input.checked) {
-      card.classList.add('selected');
-    } else {
-      card.classList.remove('selected');
-    }
-  });
-}
-
-// Animate price change
-function animatePrice() {
-  builderTotalEl.classList.remove('update');
-  void builderTotalEl.offsetWidth; // trigger reflow
-  builderTotalEl.classList.add('update');
-}
-
-// Update cake preview based on selections
-function updateCakePreview(selected) {
-  // Flavor color
-  const flavor = selected.flavor ? selected.flavor.value : '3000';
-  const color = flavorColors[flavor] || '#f5c6c6';
-  cakeLayer1.style.background = color;
-  cakeLayer2.style.background = color;
-  cakeLayer3.style.background = color;
-
-  // Size affects number of layers
-  const sizeVal = parseInt(selected.size ? selected.size.value : 0);
-  let layersToShow = 3;
-  if (sizeVal >= 6000) layersToShow = 3;      // 80 servings
-  else if (sizeVal >= 4500) layersToShow = 3; // 60 servings
-  else if (sizeVal >= 3000) layersToShow = 2; // 40 servings
-  else if (sizeVal >= 1500) layersToShow = 2; // 20 servings
-  else layersToShow = 1;                      // 10 servings
-
-  // Show/hide layers
-  cakeLayer1.style.display = layersToShow >= 1 ? 'block' : 'none';
-  cakeLayer2.style.display = layersToShow >= 2 ? 'block' : 'none';
-  cakeLayer3.style.display = layersToShow >= 3 ? 'block' : 'none';
-
-  // Topper changes based on selected topper
-  const topper = selected.topper ? selected.topper.value : '0';
-  if (topper === '200') cakeTopper.textContent = '🖋️';
-  else if (topper === '300') cakeTopper.textContent = '🌼';
-  else if (topper === '150') cakeTopper.textContent = '🕯️';
-  else cakeTopper.textContent = '🎂';
-
-  // Theme affects frosting color
-  const theme = selected.theme ? selected.theme.value : '0';
-  if (theme === '2500') cakeFrosting.style.background = '#ffd700';
-  else if (theme === '2000') cakeFrosting.style.background = '#ff4d4d';
-  else if (theme === '1500') cakeFrosting.style.background = '#f8b4d9';
-  else if (theme === '1000') cakeFrosting.style.background = '#f0f0f0';
-  else cakeFrosting.style.background = '#fff';
-}
-
-// Calculate total and update summary
-function calculateBuilderTotal() {
-  let total = 0;
-  const selected = {};
-  builderInputs.forEach(input => {
-    if (input.checked) {
-      total += parseInt(input.value);
-      selected[input.name] = { value: input.value, label: input.closest('.radio-card').querySelector('span').textContent.trim() };
-    }
-  });
-
-  // Animate price
-  builderTotalEl.textContent = `KES ${total.toLocaleString()}`;
-  builderCheckoutBtn.dataset.amount = total;
-  animatePrice();
-
-  // Update selections summary
-  let summaryText = '';
-  for (const key in selected) {
-    let text = selected[key].label;
-    if (text.includes('(+ KES')) {
-      text = text.split(' (+')[0];
-    }
-    if (text === 'No Filling' || text === 'No Topper' || text === 'None') continue;
-    summaryText += text + ' • ';
-  }
-  summaryText = summaryText.replace(/ • $/, '');
-  summarySelections.innerHTML = `<p>${summaryText}</p>`;
-
-  // Update cake preview
-  updateCakePreview(selected);
-}
-
-// Event listeners
-builderInputs.forEach(input => {
-  input.addEventListener('change', () => {
-    calculateBuilderTotal();
-    updateRadioCardClasses();
-    quickPickBtns.forEach(btn => btn.classList.remove('active'));
-  });
-});
-
-// Quick Pick Presets
-const presets = {
-  classic: { flavor: '3000', size: '0', theme: '0', filling: '500', topper: '200', addon: '150' },
-  luxury: { flavor: '3500', size: '1500', theme: '2500', filling: '500', topper: '300', addon: '150' },
-  tropical: { flavor: '4500', size: '0', theme: '1000', filling: '700', topper: '300', addon: '300' }
-};
-
-quickPickBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const preset = btn.dataset.preset;
-    const values = presets[preset];
-    builderInputs.forEach(input => {
-      if (values[input.name] === input.value) {
-        input.checked = true;
+  // ---------- Mobile menu ----------
+  const menuToggle = $('#menu-toggle');
+  const navLinks = $('#nav-links');
+  if (menuToggle && navLinks) {
+    menuToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = navLinks.classList.toggle('active');
+      menuToggle.setAttribute('aria-expanded', String(open));
+    });
+    document.addEventListener('click', (e) => {
+      if (navLinks.classList.contains('active') &&
+          !navLinks.contains(e.target) &&
+          e.target !== menuToggle) {
+        navLinks.classList.remove('active');
+        menuToggle.setAttribute('aria-expanded', 'false');
       }
     });
-    calculateBuilderTotal();
-    updateRadioCardClasses();
-    quickPickBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-  });
-});
+    $$('a', navLinks).forEach((link) => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
 
-// Reset button
-builderResetBtn.addEventListener('click', () => {
-  builderInputs.forEach(input => {
-    const group = document.querySelectorAll(`input[name="${input.name}"]`);
-    group[0].checked = true;
+  // ---------- Header shadow ----------
+  const siteHeader = $('#site-header');
+  if (siteHeader) {
+    window.addEventListener('scroll', () => {
+      siteHeader.style.boxShadow = window.scrollY > 50
+        ? '0 4px 12px rgba(0,0,0,0.1)'
+        : 'none';
+    }, { passive: true });
+  }
+
+  // ---------- FAQ accordion ----------
+  $$('.faq-item').forEach((item) => {
+    const q = $('.faq-question', item);
+    if (!q) return;
+    q.addEventListener('click', () => {
+      const wasActive = item.classList.contains('active');
+      $$('.faq-item').forEach((i) => {
+        i.classList.remove('active');
+        const qi = $('.faq-question', i);
+        if (qi) qi.setAttribute('aria-expanded', 'false');
+      });
+      if (!wasActive) {
+        item.classList.add('active');
+        q.setAttribute('aria-expanded', 'true');
+      }
+    });
   });
+
+  // ---------- WhatsApp link routing ----------
+  $$('.wa-link:not([data-share-location])').forEach((link) => {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      const msg = this.dataset.message;
+      if (msg) openWhatsApp(msg);
+    });
+  });
+
+  // =========================================================
+  // CART
+  // =========================================================
+  let cart = [];
+  try {
+    cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+    if (!Array.isArray(cart)) cart = [];
+  } catch {
+    cart = [];
+  }
+
+  const cartDrawer = $('#cart-drawer');
+  const cartBackdrop = $('#cart-backdrop');
+  const cartBody = $('#cart-body');
+  const cartFooter = $('#cart-footer');
+  const cartCount = $('#cart-count');
+  const cartSubtotalEl = $('#cart-subtotal');
+  const cartDiscountRow = $('#cart-discount-row');
+  const cartDiscountEl = $('#cart-discount');
+  const cartTotalEl = $('#cart-total');
+  const cartCheckoutBtn = $('#cart-checkout-btn');
+  const cartTrap = makeFocusTrap(cartDrawer);
+
+  function saveCart() {
+    try {
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    } catch { /* quota exceeded — silently ignore */ }
+  }
+
+  function cartSubtotal() {
+    return cart.reduce((s, i) => s + i.price * i.qty, 0);
+  }
+
+  function cartDiscountTotal() {
+    return cart.reduce((s, i) => s + (i.discount || 0) * i.qty, 0);
+  }
+
+  function cartItemCount() {
+    return cart.reduce((n, i) => n + i.qty, 0);
+  }
+
+  function renderCart() {
+    const count = cartItemCount();
+
+    if (cartCount) {
+      cartCount.textContent = String(count);
+      cartCount.classList.toggle('is-empty', count === 0);
+    }
+    const cartBtn = $('#cart-button');
+    if (cartBtn) {
+      cartBtn.setAttribute('aria-label', `Open cart, ${count} item${count === 1 ? '' : 's'}`);
+    }
+
+    if (!cartBody) return;
+
+    if (!cart.length) {
+      cartBody.innerHTML = `
+        <div class="cart-empty">
+          <p class="cart-empty-icon" aria-hidden="true">🛍️</p>
+          <p class="cart-empty-title">Your cart is empty.</p>
+          <p class="cart-empty-sub">Start with a cake — you can always add extras at checkout.</p>
+          <a href="#builder" class="cta-btn secondary" id="cart-empty-cta">Build a cake</a>
+        </div>`;
+      if (cartFooter) cartFooter.hidden = true;
+      return;
+    }
+
+    if (cartFooter) cartFooter.hidden = false;
+
+    cartBody.innerHTML = cart.map((item, idx) => `
+      <article class="cart-item" data-index="${idx}">
+        <div class="cart-item-head">
+          <h3 class="cart-item-title">${escapeHtml(item.title)}</h3>
+          <button type="button" class="cart-item-remove" data-action="remove" data-index="${idx}" aria-label="Remove ${escapeHtml(item.title)}">×</button>
+        </div>
+        ${item.detail ? `<p class="cart-item-detail">${escapeHtml(item.detail)}</p>` : ''}
+        <div class="cart-item-foot">
+          <div class="qty-stepper" role="group" aria-label="Quantity for ${escapeHtml(item.title)}">
+            <button type="button" data-action="dec" data-index="${idx}" aria-label="Decrease quantity">−</button>
+            <span>${item.qty}</span>
+            <button type="button" data-action="inc" data-index="${idx}" aria-label="Increase quantity">+</button>
+          </div>
+          <span class="cart-item-price">${kes(item.price * item.qty)}</span>
+        </div>
+        ${item.discount ? `<p class="cart-item-savings">Saved ${kes(item.discount * item.qty)} on this bundle</p>` : ''}
+      </article>
+    `).join('');
+
+    const sub = cartSubtotal();
+    const disc = cartDiscountTotal();
+    if (cartSubtotalEl) cartSubtotalEl.textContent = kes(sub);
+    if (cartTotalEl) cartTotalEl.textContent = kes(sub - disc);
+    if (cartDiscountRow && cartDiscountEl) {
+      if (disc > 0) {
+        cartDiscountRow.hidden = false;
+        cartDiscountEl.textContent = `− ${kes(disc)}`;
+      } else {
+        cartDiscountRow.hidden = true;
+      }
+    }
+  }
+
+  function addToCart(item) {
+    const existing = cart.find((i) => i.id === item.id);
+    if (existing) {
+      existing.qty += item.qty || 1;
+    } else {
+      cart.push({ ...item, qty: item.qty || 1 });
+    }
+    saveCart();
+    renderCart();
+    openCartDrawer();
+  }
+
+  function openCartDrawer() {
+    if (!cartDrawer || !cartBackdrop) return;
+    cartBackdrop.hidden = false;
+    requestAnimationFrame(() => {
+      cartDrawer.classList.add('active');
+      cartBackdrop.classList.add('active');
+    });
+    cartTrap.activate();
+  }
+
+  function closeCartDrawer() {
+    if (!cartDrawer || !cartBackdrop) return;
+    cartDrawer.classList.remove('active');
+    cartBackdrop.classList.remove('active');
+    setTimeout(() => {
+      cartBackdrop.hidden = true;
+    }, 250);
+    cartTrap.deactivate();
+  }
+
+  const cartBtn = $('#cart-button');
+  if (cartBtn) cartBtn.addEventListener('click', openCartDrawer);
+  if ($('#cart-close')) $('#cart-close').addEventListener('click', closeCartDrawer);
+  if (cartBackdrop) cartBackdrop.addEventListener('click', closeCartDrawer);
+
+  if (cartBody) {
+    cartBody.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-action]');
+      if (!btn) {
+        if (e.target.closest('#cart-empty-cta')) closeCartDrawer();
+        return;
+      }
+      const idx = parseInt(btn.dataset.index, 10);
+      const action = btn.dataset.action;
+      if (Number.isNaN(idx) || !cart[idx]) return;
+
+      if (action === 'remove') cart.splice(idx, 1);
+      else if (action === 'inc') cart[idx].qty += 1;
+      else if (action === 'dec') {
+        cart[idx].qty -= 1;
+        if (cart[idx].qty < 1) cart.splice(idx, 1);
+      }
+      saveCart();
+      renderCart();
+    });
+  }
+
+  // =========================================================
+  // ORDER FORM
+  // =========================================================
+  const orderOverlay = $('#order-overlay');
+  const orderForm = $('#order-form');
+  const orderTrap = orderOverlay ? makeFocusTrap(orderOverlay) : null;
+
+  const nameInput = $('#order-name');
+  const phoneInput = $('#order-phone');
+  const estateInput = $('#order-estate');
+  const estateField = $('#estate-field');
+  const dateInput = $('#order-date');
+  const notesInput = $('#order-notes');
+  const rushWarning = $('#rush-warning');
+
+  function setFieldError(inputEl, errorEl, message) {
+    if (!inputEl || !errorEl) return;
+    if (message) {
+      inputEl.setAttribute('aria-invalid', 'true');
+      errorEl.textContent = message;
+    } else {
+      inputEl.removeAttribute('aria-invalid');
+      errorEl.textContent = '';
+    }
+  }
+
+  function validateKenyanPhone(raw) {
+    const cleaned = String(raw).replace(/[\s\-()]/g, '');
+    return /^(\+?254|0)(7|1)\d{8}$/.test(cleaned);
+  }
+
+  function todayISO() {
+    const d = new Date();
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return d.toISOString().split('T')[0];
+  }
+
+  function isWithin48Hours(dateStr) {
+    if (!dateStr) return false;
+    const chosen = new Date(dateStr + 'T23:59:59');
+    return (chosen - Date.now()) < 48 * 60 * 60 * 1000;
+  }
+
+  function updateFulfilmentFields() {
+    const checked = document.querySelector('input[name="fulfilment"]:checked');
+    if (!checked || !estateField || !estateInput) return;
+    const isDelivery = checked.value === 'delivery';
+    estateField.hidden = !isDelivery;
+    if (isDelivery) {
+      estateInput.setAttribute('required', '');
+    } else {
+      estateInput.removeAttribute('required');
+      const err = $('#estate-error');
+      setFieldError(estateInput, err, '');
+    }
+  }
+
+  function openOrderForm() {
+    if (!cart.length || !orderOverlay || !orderTrap) return;
+    if (dateInput) dateInput.min = todayISO();
+    orderOverlay.classList.add('active');
+    orderTrap.activate();
+  }
+
+  function closeOrderForm() {
+    if (!orderOverlay || !orderTrap) return;
+    orderOverlay.classList.remove('active');
+    orderTrap.deactivate();
+  }
+
+  $$('input[name="fulfilment"]').forEach((r) => {
+    r.addEventListener('change', updateFulfilmentFields);
+  });
+
+  if (dateInput) {
+    dateInput.addEventListener('change', () => {
+      if (rushWarning) {
+        rushWarning.hidden = !(dateInput.value && isWithin48Hours(dateInput.value));
+      }
+      setFieldError(dateInput, $('#date-error'), '');
+    });
+  }
+
+  if (phoneInput) phoneInput.addEventListener('input', () => setFieldError(phoneInput, $('#phone-error'), ''));
+  if (nameInput) nameInput.addEventListener('input', () => setFieldError(nameInput, $('#name-error'), ''));
+  if (estateInput) estateInput.addEventListener('input', () => setFieldError(estateInput, $('#estate-error'), ''));
+
+  if ($('#order-close')) $('#order-close').addEventListener('click', closeOrderForm);
+  if (orderOverlay) {
+    orderOverlay.addEventListener('click', (e) => {
+      if (e.target === orderOverlay) closeOrderForm();
+    });
+  }
+
+  function composeOrderMessage(formData, items) {
+    const lines = ["Hi Prism & Pastry! I'd like to place an order:", ''];
+
+    items.forEach((i) => {
+      lines.push(`• ${i.title} — ${kes(i.price)} ×${i.qty}`);
+      if (i.detail) lines.push(`   ${i.detail}`);
+    });
+
+    const sub = items.reduce((s, i) => s + i.price * i.qty, 0);
+    const disc = items.reduce((s, i) => s + (i.discount || 0) * i.qty, 0);
+    lines.push('');
+    lines.push(`Subtotal: ${kes(sub)}`);
+    if (disc > 0) lines.push(`Bundle discount: −${kes(disc)}`);
+    lines.push(`Total: ${kes(sub - disc)}`);
+    lines.push('');
+    lines.push('--- Order details ---');
+    lines.push(`Name: ${formData.name}`);
+    lines.push(`Phone: ${formData.phone}`);
+    lines.push(formData.fulfilment === 'delivery'
+      ? `Fulfilment: Delivery to ${formData.estate}`
+      : 'Fulfilment: Pickup in Imara Daima');
+    lines.push(`Date needed: ${formData.date}`);
+    if (formData.notes) lines.push(`Notes: ${formData.notes}`);
+    lines.push('');
+    lines.push('Please confirm the delivery fee and send payment details.');
+    return lines.join('\n');
+  }
+
+  if (orderForm) {
+    orderForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let valid = true;
+
+      // Name
+      if (!nameInput.value.trim()) {
+        setFieldError(nameInput, $('#name-error'), 'Please tell us your name.');
+        valid = false;
+      } else {
+        setFieldError(nameInput, $('#name-error'), '');
+      }
+
+      // Phone
+      if (!phoneInput.value.trim()) {
+        setFieldError(phoneInput, $('#phone-error'), 'We need this to confirm your order.');
+        valid = false;
+      } else if (!validateKenyanPhone(phoneInput.value)) {
+        setFieldError(phoneInput, $('#phone-error'), 'Use a Kenyan number, e.g. 0712 345 678 or +254 712 345 678.');
+        valid = false;
+      } else {
+        setFieldError(phoneInput, $('#phone-error'), '');
+      }
+
+      // Estate if delivery
+      const fulfilmentChecked = document.querySelector('input[name="fulfilment"]:checked');
+      const fulfilment = fulfilmentChecked ? fulfilmentChecked.value : 'pickup';
+      if (fulfilment === 'delivery' && !estateInput.value.trim()) {
+        setFieldError(estateInput, $('#estate-error'), 'Which estate or area should we deliver to?');
+        valid = false;
+      }
+
+      // Date
+      if (!dateInput.value) {
+        setFieldError(dateInput, $('#date-error'), 'Pick the date you need the cake.');
+        valid = false;
+      } else if (dateInput.value < todayISO()) {
+        setFieldError(dateInput, $('#date-error'), 'That date is in the past — pick a future date.');
+        valid = false;
+      } else {
+        setFieldError(dateInput, $('#date-error'), '');
+      }
+
+      if (!valid) {
+        const firstInvalid = orderForm.querySelector('[aria-invalid="true"]');
+        if (firstInvalid) firstInvalid.focus();
+        return;
+      }
+
+      const formData = {
+        name: nameInput.value.trim(),
+        phone: phoneInput.value.trim(),
+        fulfilment,
+        estate: fulfilment === 'delivery' ? estateInput.value.trim() : '',
+        date: dateInput.value,
+        notes: notesInput.value.trim()
+      };
+
+      openWhatsApp(composeOrderMessage(formData, cart));
+
+      cart = [];
+      saveCart();
+      renderCart();
+      closeOrderForm();
+      orderForm.reset();
+      updateFulfilmentFields();
+      if (rushWarning) rushWarning.hidden = true;
+    });
+  }
+
+  if (cartCheckoutBtn) {
+    cartCheckoutBtn.addEventListener('click', () => {
+      closeCartDrawer();
+      setTimeout(openOrderForm, 280);
+    });
+  }
+
+  // =========================================================
+  // M-PESA DEMO
+  // =========================================================
+  const mpesaOverlay = $('#mpesa-overlay');
+  const mpesaLoader = $('#mpesa-loader');
+  const mpesaSuccess = $('#mpesa-success');
+  const mpesaError = $('#mpesa-error');
+  const mpesaAmountEl = $('.mpesa-amount');
+  const mpesaTrap = mpesaOverlay ? makeFocusTrap(mpesaOverlay) : null;
+  let mpesaTimeout = null;
+
+  function triggerMpesaPayment(amount) {
+    if (!mpesaOverlay) return;
+    if (mpesaAmountEl) mpesaAmountEl.textContent = `${kes(amount)}.00`;
+    mpesaOverlay.classList.add('active');
+    if (mpesaLoader) mpesaLoader.classList.remove('hidden');
+    if (mpesaSuccess) mpesaSuccess.classList.add('hidden');
+    if (mpesaError) mpesaError.classList.add('hidden');
+    if (mpesaTrap) mpesaTrap.activate();
+
+    mpesaTimeout = setTimeout(() => {
+      if (mpesaLoader) mpesaLoader.classList.add('hidden');
+      if (mpesaSuccess) mpesaSuccess.classList.remove('hidden');
+      setTimeout(() => {
+        closeMpesa();
+        openWhatsApp(`Hi! I just completed a ${kes(amount)} demo payment. Please confirm my order.`);
+      }, 1800);
+    }, 2200);
+  }
+
+  function closeMpesa() {
+    clearTimeout(mpesaTimeout);
+    if (!mpesaOverlay) return;
+    mpesaOverlay.classList.remove('active');
+    if (mpesaTrap) mpesaTrap.deactivate();
+  }
+
+  if ($('#mpesa-close')) $('#mpesa-close').addEventListener('click', closeMpesa);
+
+  if ($('#mpesa-cancel')) {
+    $('#mpesa-cancel').addEventListener('click', () => {
+      clearTimeout(mpesaTimeout);
+      if (mpesaLoader) mpesaLoader.classList.add('hidden');
+      if (mpesaSuccess) mpesaSuccess.classList.add('hidden');
+      if (mpesaError) mpesaError.classList.remove('hidden');
+      setTimeout(closeMpesa, 1400);
+    });
+  }
+
+  if (mpesaOverlay) {
+    mpesaOverlay.addEventListener('click', (e) => {
+      if (e.target === mpesaOverlay) closeMpesa();
+    });
+  }
+
+  const payDepositLink = $('#pay-deposit-demo');
+  if (payDepositLink) {
+    payDepositLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      triggerMpesaPayment(2250);
+    });
+  }
+
+  // =========================================================
+  // BUNDLE → CART
+  // =========================================================
+  const bundleItems = $$('.bundle-item');
+  const bundleTotalEl = $('#bundle-total');
+  const bundleOrderBtn = $('#bundle-order-btn');
+  const bundleHint = $('#bundle-hint');
+
+  function getSelectedBundle() {
+    return bundleItems
+      .filter((i) => i.classList.contains('selected'))
+      .map((i) => ({
+        id: i.dataset.id,
+        title: ($('h4', i)?.textContent || '').trim(),
+        price: parseInt(i.dataset.price, 10) || 0
+      }));
+  }
+
+  function updateBundleTotal() {
+    const selected = getSelectedBundle();
+    const subtotal = selected.reduce((s, i) => s + i.price, 0);
+    const applyDiscount = selected.length >= 2;
+    const discount = applyDiscount ? Math.round(subtotal * 0.10) : 0;
+    const total = subtotal - discount;
+
+    if (bundleTotalEl) {
+      if (applyDiscount) {
+        bundleTotalEl.innerHTML = `${kes(total)} <span class="discount-note">(saved ${kes(discount)})</span>`;
+      } else {
+        bundleTotalEl.textContent = kes(total);
+      }
+    }
+    if (bundleHint) {
+      bundleHint.textContent = applyDiscount
+        ? `Nice — you saved ${kes(discount)} on this bundle.`
+        : 'Add one more item to unlock the 10% bundle discount.';
+    }
+
+    return { selected, subtotal, discount, total };
+  }
+
+  bundleItems.forEach((item) => {
+    const toggle = () => {
+      item.classList.toggle('selected');
+      const cb = $('.bundle-checkbox', item);
+      const isSel = item.classList.contains('selected');
+      if (cb) cb.textContent = isSel ? '✓' : '+';
+      item.setAttribute('aria-pressed', String(isSel));
+      updateBundleTotal();
+    };
+    item.addEventListener('click', toggle);
+    item.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggle();
+      }
+    });
+  });
+
+  if (bundleOrderBtn) {
+    bundleOrderBtn.addEventListener('click', () => {
+      const { selected, subtotal, discount } = updateBundleTotal();
+      if (selected.length < 1) return;
+
+      const itemTitles = selected.map((i) => i.title).join(' + ');
+      const detail = `${selected.length} item${selected.length === 1 ? '' : 's'} · ${kes(subtotal)} before discount`;
+
+      addToCart({
+        id: `bundle-${selected.map((i) => i.id).sort().join('-')}`,
+        type: 'bundle',
+        title: 'Bundle: ' + itemTitles,
+        detail,
+        price: subtotal,
+        discount,
+        qty: 1
+      });
+    });
+  }
+
+  updateBundleTotal();
+
+  // =========================================================
+  // CAKE BUILDER
+  // =========================================================
+  const builderInputs = $$('input[type="radio"]');
+  const builderTotalEl = $('#builder-total');
+  const builderCheckoutBtn = $('#builder-checkout-btn');
+  const builderResetBtn = $('#builder-reset-btn');
+  const summarySelections = $('#summary-selections');
+  const quickPickBtns = $$('.quick-pick');
+  const cakeLayer1 = $('.layer-1');
+  const cakeLayer2 = $('.layer-2');
+  const cakeLayer3 = $('.layer-3');
+  const cakeFrosting = $('#cake-frosting');
+  const cakeTopper = $('#cake-topper');
+
+  const flavorColors = {
+    '3000': '#f5c6c6',
+    '3500': '#8b5a2b',
+    '4000': '#c0392b',
+    '4500': '#6f4e37',
+    '4200': '#f0d9b5'
+  };
+
+  function cleanLabel(input) {
+    const span = input.closest('.radio-card')?.querySelector('span');
+    if (!span) return '';
+    let text = '';
+    span.childNodes.forEach((n) => {
+      if (n.nodeType === Node.TEXT_NODE) text += n.textContent;
+    });
+    return text.trim().split(' (')[0].split(' (+')[0].trim();
+  }
+
+  function updateRadioCardClasses() {
+    builderInputs.forEach((input) => {
+      const card = input.closest('.radio-card');
+      if (card) card.classList.toggle('selected', input.checked);
+    });
+  }
+
+  function animatePrice() {
+    if (prefersReducedMotion || !builderTotalEl) return;
+    builderTotalEl.classList.remove('update');
+    void builderTotalEl.offsetWidth;
+    builderTotalEl.classList.add('update');
+  }
+
+  function updateCakePreview(selected) {
+    const color = (selected.flavor && flavorColors[selected.flavor.value]) || '#f5c6c6';
+    [cakeLayer1, cakeLayer2, cakeLayer3].forEach((l) => {
+      if (l) l.style.background = color;
+    });
+
+    const sizeVal = parseInt(selected.size?.value || 0, 10);
+    const layers = sizeVal >= 3000 ? 3 : sizeVal >= 1500 ? 2 : 1;
+    if (cakeLayer1) cakeLayer1.style.display = layers >= 1 ? 'block' : 'none';
+    if (cakeLayer2) cakeLayer2.style.display = layers >= 2 ? 'block' : 'none';
+    if (cakeLayer3) cakeLayer3.style.display = layers >= 3 ? 'block' : 'none';
+
+    const topperVal = selected.topper?.value || '0';
+    if (cakeTopper) {
+      cakeTopper.textContent =
+        topperVal === '200' ? '🖋️' :
+        topperVal === '300' ? '🌼' :
+        topperVal === '150' ? '🕯️' : '🎂';
+    }
+
+    const theme = selected.theme?.value || '0';
+    if (cakeFrosting) {
+      cakeFrosting.style.background =
+        theme === '2500' ? '#ffd700' :
+        theme === '2000' ? '#ff4d4d' :
+        theme === '1500' ? '#f8b4d9' :
+        theme === '1000' ? '#f0f0f0' : '#fff';
+    }
+  }
+
+  function calculateBuilderTotal() {
+    let total = 0;
+    const selected = {};
+    builderInputs.forEach((input) => {
+      if (input.checked) {
+        total += parseInt(input.value, 10) || 0;
+        selected[input.name] = { value: input.value, label: cleanLabel(input) };
+      }
+    });
+
+    if (builderTotalEl) builderTotalEl.textContent = kes(total);
+    if (builderCheckoutBtn) {
+      builderCheckoutBtn.dataset.amount = String(total);
+      builderCheckoutBtn.textContent = `Add to Cart — ${kes(total)}`;
+    }
+    animatePrice();
+
+    const parts = [];
+    if (selected.flavor) parts.push(selected.flavor.label);
+    if (selected.size) parts.push(selected.size.label);
+    if (selected.theme) parts.push(selected.theme.label);
+    if (selected.filling && selected.filling.value !== '0') parts.push(selected.filling.label);
+    if (selected.topper && selected.topper.value !== '0') parts.push(selected.topper.label);
+    if (selected.addon && selected.addon.value !== '0') parts.push(selected.addon.label);
+    if (summarySelections) summarySelections.innerHTML = `<p>${parts.join(' · ')}</p>`;
+
+    updateCakePreview(selected);
+    return { selected, total };
+  }
+
+  builderInputs.forEach((input) => {
+    input.addEventListener('change', () => {
+      calculateBuilderTotal();
+      updateRadioCardClasses();
+      quickPickBtns.forEach((btn) => btn.classList.remove('active'));
+    });
+  });
+
+  const presets = {
+    classic:  { flavor: '3000', size: '0',    theme: '0',    filling: '500', topper: '200', addon: '150' },
+    luxury:   { flavor: '3500', size: '1500', theme: '2500', filling: '500', topper: '300', addon: '150' },
+    tropical: { flavor: '4500', size: '0',    theme: '1000', filling: '700', topper: '300', addon: '300' }
+  };
+
+  quickPickBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const values = presets[btn.dataset.preset];
+      if (!values) return;
+      builderInputs.forEach((input) => {
+        if (values[input.name] === input.value) input.checked = true;
+      });
+      calculateBuilderTotal();
+      updateRadioCardClasses();
+      quickPickBtns.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  if (builderResetBtn) {
+    builderResetBtn.addEventListener('click', () => {
+      builderInputs.forEach((input) => {
+        const group = document.querySelectorAll(`input[name="${input.name}"]`);
+        if (group[0]) group[0].checked = true;
+      });
+      calculateBuilderTotal();
+      updateRadioCardClasses();
+      quickPickBtns.forEach((b) => b.classList.remove('active'));
+    });
+  }
+
+  function hashString(str) {
+    let h = 5381;
+    for (let i = 0; i < str.length; i++) {
+      h = ((h << 5) + h + str.charCodeAt(i)) | 0;
+    }
+    return (h >>> 0).toString(36);
+  }
+
+  if (builderCheckoutBtn) {
+    builderCheckoutBtn.addEventListener('click', () => {
+      const { selected, total } = calculateBuilderTotal();
+      const detailParts = [];
+      if (selected.flavor) detailParts.push(selected.flavor.label);
+      if (selected.size) detailParts.push(selected.size.label);
+      if (selected.theme) detailParts.push(selected.theme.label);
+      if (selected.filling && selected.filling.value !== '0') detailParts.push(selected.filling.label);
+      if (selected.topper && selected.topper.value !== '0') detailParts.push(selected.topper.label);
+      if (selected.addon && selected.addon.value !== '0') detailParts.push(selected.addon.label);
+
+      const specKey = JSON.stringify(
+        Object.fromEntries(Object.entries(selected).map(([k, v]) => [k, v.value]))
+      );
+
+      addToCart({
+        id: `custom-${hashString(specKey)}`,
+        type: 'custom',
+        title: 'Custom Cake',
+        detail: detailParts.join(' · '),
+        price: total,
+        qty: 1
+      });
+    });
+  }
+
   calculateBuilderTotal();
   updateRadioCardClasses();
-  quickPickBtns.forEach(b => b.classList.remove('active'));
-});
 
-// Initialize
-calculateBuilderTotal();
-updateRadioCardClasses();
+  // =========================================================
+  // SCARCITY NOTICES
+  // =========================================================
+  const toastContainer = $('#purchase-toast-container');
+  const scarcityMessages = [
+    { headline: '5 of 12 custom slots left this weekend.', sub: 'Book by Thursday to lock a Saturday delivery.' },
+    { headline: 'Saturday delivery is 80% booked.', sub: 'We cap weekends at 12 cakes to stay on time.' },
+    { headline: 'Ready cakes for Saturday pickup: 3 left.', sub: 'Red velvet already sold out.' }
+  ];
 
-if (builderCheckoutBtn) {
-  builderCheckoutBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    triggerMpesaPayment(parseInt(builderCheckoutBtn.dataset.amount));
-  });
-}
+  function showScarcityNotice() {
+    if (!toastContainer) return;
+    const msg = scarcityMessages[Math.floor(Math.random() * scarcityMessages.length)];
+    const toast = document.createElement('div');
+    toast.className = 'scarcity-toast';
+    toast.setAttribute('role', 'status');
+    toast.innerHTML = `
+      <div class="scarcity-icon" aria-hidden="true">⏱</div>
+      <div class="scarcity-content">
+        <p><strong>${escapeHtml(msg.headline)}</strong></p>
+        <span class="scarcity-sub">${escapeHtml(msg.sub)}</span>
+      </div>
+      <button type="button" class="toast-close" aria-label="Dismiss">×</button>`;
+    toastContainer.appendChild(toast);
 
-// 11. FOMO Toasts
-const purchaseToastContainer = document.getElementById('purchase-toast-container');
-const livePurchases = [
-  { name: "Wanjiku", location: "Westlands", product: "Plum Prism Cake", price: "KES 4,500" },
-  { name: "Brian", location: "Kiambu", product: "6 Gourmet Cupcakes", price: "KES 800" },
-  { name: "Amina", location: "Machakos", product: "Mango Geometric Cake", price: "KES 6,200" },
-  { name: "Otieno", location: "Imara Daima", product: "Bundle Cake + Topper", price: "KES 5,150" },
-  { name: "Faith", location: "Karen", product: "Chocolate Prism Cake", price: "KES 3,800" }
-];
-
-function showPurchaseToast() {
-  const random = livePurchases[Math.floor(Math.random() * livePurchases.length)];
-  const toast = document.createElement('div');
-  toast.className = 'purchase-toast';
-  const mins = Math.floor(Math.random() * 10) + 1;
-  const time = mins === 1 ? "Just now" : `${mins} mins ago`;
-  toast.innerHTML = `<div class="toast-icon">✓</div><div class="toast-content"><p><strong>${random.name}</strong> from ${random.location} just ordered <strong>${random.product}</strong></p><span class="toast-time">${time} • Verified M-Pesa</span></div><button type="button" class="toast-close" aria-label="Close notification">×</button>`;
-  purchaseToastContainer.appendChild(toast);
-  setTimeout(() => {
-    if (toast.parentNode) toast.remove();
-  }, 6000);
-  toast.querySelector('.toast-close').addEventListener('click', () => toast.remove());
-}
-
-setTimeout(showPurchaseToast, 4000);
-// Increase frequency to 30 seconds to avoid annoyance
-setInterval(showPurchaseToast, 30000);
-
-// 12. Tasting Calendar
-const tastingOverlay = document.getElementById('tasting-overlay');
-const openTastingBtn = document.getElementById('open-tasting-modal');
-const closeTastingBtn = document.getElementById('close-tasting-modal');
-const dateGrid = document.getElementById('date-grid');
-const timeGrid = document.getElementById('time-grid');
-const confirmTastingBtn = document.getElementById('confirm-tasting-btn');
-const tastingError = document.getElementById('tasting-error');
-let selectedDate = '';
-let selectedTime = '';
-
-const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const today = new Date();
-for (let i = 1; i <= 7; i++) {
-  const nextDate = new Date(today);
-  nextDate.setDate(today.getDate() + i);
-  const dateStr = `${days[nextDate.getDay()]} ${nextDate.getDate()} ${months[nextDate.getMonth()]}`;
-  const btn = document.createElement('button');
-  btn.type = 'button';
-  btn.className = 'date-slot';
-  btn.innerText = dateStr;
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.date-slot').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-    selectedDate = dateStr;
-    tastingError.classList.remove('visible');
-  });
-  dateGrid.appendChild(btn);
-}
-
-timeGrid.querySelectorAll('.time-slot').forEach(slot => {
-  slot.addEventListener('click', () => {
-    timeGrid.querySelectorAll('.time-slot').forEach(b => b.classList.remove('selected'));
-    slot.classList.add('selected');
-    selectedTime = slot.dataset.time;
-    tastingError.classList.remove('visible');
-  });
-});
-
-openTastingBtn.addEventListener('click', () => tastingOverlay.classList.add('active'));
-closeTastingBtn.addEventListener('click', () => tastingOverlay.classList.remove('active'));
-tastingOverlay.addEventListener('click', (e) => {
-  if (e.target === tastingOverlay) tastingOverlay.classList.remove('active');
-});
-confirmTastingBtn.addEventListener('click', () => {
-  if (!selectedDate || !selectedTime) {
-    tastingError.classList.add('visible');
-    return;
+    const removeToast = () => { if (toast.parentNode) toast.remove(); };
+    setTimeout(removeToast, 8000);
+    $('.toast-close', toast).addEventListener('click', removeToast);
   }
-  const message = `Hi Prism & Pastry! I'd like to book a FREE tasting session at your Imara Daima studio on ${selectedDate} at ${selectedTime}. Is this slot available?`;
-  window.open(`https://wa.me/254702555093?text=${encodeURIComponent(message)}`, '_blank');
-  tastingOverlay.classList.remove('active');
-});
 
-// 13. Directions Button - Get User Location
-const directionsBtn = document.getElementById('directions-btn');
-if (directionsBtn) {
-  directionsBtn.addEventListener('click', () => {
-    const destination = 'Imaara+Mall+Imara+Daima+Nairobi';
-    if (navigator.geolocation) {
-      directionsBtn.textContent = 'Locating...';
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-          const url = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${destination}&travelmode=driving`;
-          window.open(url, '_blank');
-          directionsBtn.textContent = '📍 Directions from My Location';
-        },
-        () => {
-          const url = `https://www.google.com/maps/dir/?api=1&destination=${destination}&travelmode=driving`;
-          window.open(url, '_blank');
-          directionsBtn.textContent = '📍 Directions from My Location';
-        }
-      );
-    } else {
-      const url = `https://www.google.com/maps/dir/?api=1&destination=${destination}&travelmode=driving`;
-      window.open(url, '_blank');
+  if (!prefersReducedMotion) {
+    setTimeout(showScarcityNotice, 6000);
+    setInterval(showScarcityNotice, 45000);
+  }
+
+  // =========================================================
+  // TASTING MODAL
+  // =========================================================
+  const tastingOverlay = $('#tasting-overlay');
+  const openTastingBtn = $('#open-tasting-modal');
+  const closeTastingBtn = $('#close-tasting-modal');
+  const dateGrid = $('#date-grid');
+  const timeGrid = $('#time-grid');
+  const confirmTastingBtn = $('#confirm-tasting-btn');
+  const tastingError = $('#tasting-error');
+  const tastingTrap = tastingOverlay ? makeFocusTrap(tastingOverlay) : null;
+  let selectedDate = '';
+  let selectedTime = '';
+
+  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  if (dateGrid) {
+    const now = new Date();
+    for (let i = 1; i <= 7; i++) {
+      const d = new Date(now);
+      d.setDate(now.getDate() + i);
+      const label = `${dayNames[d.getDay()]} ${d.getDate()} ${monthNames[d.getMonth()]}`;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'date-slot';
+      btn.textContent = label;
+      btn.setAttribute('aria-pressed', 'false');
+      btn.addEventListener('click', () => {
+        $$('.date-slot', dateGrid).forEach((b) => {
+          b.classList.remove('selected');
+          b.setAttribute('aria-pressed', 'false');
+        });
+        btn.classList.add('selected');
+        btn.setAttribute('aria-pressed', 'true');
+        selectedDate = label;
+        if (tastingError) tastingError.classList.remove('visible');
+      });
+      dateGrid.appendChild(btn);
+    }
+  }
+
+  if (timeGrid) {
+    $$('.time-slot', timeGrid).forEach((slot) => {
+      slot.setAttribute('aria-pressed', 'false');
+      slot.addEventListener('click', () => {
+        $$('.time-slot', timeGrid).forEach((b) => {
+          b.classList.remove('selected');
+          b.setAttribute('aria-pressed', 'false');
+        });
+        slot.classList.add('selected');
+        slot.setAttribute('aria-pressed', 'true');
+        selectedTime = slot.dataset.time;
+        if (tastingError) tastingError.classList.remove('visible');
+      });
+    });
+  }
+
+  function closeTasting() {
+    if (!tastingOverlay || !tastingTrap) return;
+    tastingOverlay.classList.remove('active');
+    tastingTrap.deactivate();
+  }
+
+  if (openTastingBtn && tastingOverlay && tastingTrap) {
+    openTastingBtn.addEventListener('click', () => {
+      tastingOverlay.classList.add('active');
+      tastingTrap.activate();
+    });
+  }
+  if (closeTastingBtn) closeTastingBtn.addEventListener('click', closeTasting);
+  if (tastingOverlay) {
+    tastingOverlay.addEventListener('click', (e) => {
+      if (e.target === tastingOverlay) closeTasting();
+    });
+  }
+  if (confirmTastingBtn) {
+    confirmTastingBtn.addEventListener('click', () => {
+      if (!selectedDate || !selectedTime) {
+        if (tastingError) tastingError.classList.add('visible');
+        return;
+      }
+      openWhatsApp(`Hi Prism & Pastry! I'd like to book a FREE tasting session at your Imara Daima studio on ${selectedDate} at ${selectedTime}. Is this slot available?`);
+      closeTasting();
+    });
+  }
+
+  // =========================================================
+  // LOCATION SHARING
+  // =========================================================
+  function shareLocation(btn) {
+    const original = btn.textContent;
+    if (!('geolocation' in navigator)) {
+      openWhatsApp("Hi! I'd like to share my location but my browser doesn't support geolocation. Can you guide me?");
+      return;
+    }
+    btn.textContent = '📍 Locating...';
+    btn.disabled = true;
+
+    const timer = setTimeout(() => {
+      btn.textContent = original;
+      btn.disabled = false;
+      openWhatsApp('Hi! I tried to share my location but it took too long. Can you guide me?');
+    }, 8000);
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        clearTimeout(timer);
+        const link = `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
+        openWhatsApp(`Hi! My current location is: ${link}. Please confirm delivery fee.`);
+        btn.textContent = original;
+        btn.disabled = false;
+      },
+      (err) => {
+        clearTimeout(timer);
+        btn.textContent = original;
+        btn.disabled = false;
+        const msg = err.code === err.PERMISSION_DENIED
+          ? "Hi! I'd like to share my location but need to enable permissions. Can you guide me?"
+          : "Hi! I couldn't fetch my location. Can you guide me?";
+        openWhatsApp(msg);
+      },
+      { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
+    );
+  }
+
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-share-location]');
+    if (b) {
+      e.preventDefault();
+      shareLocation(b);
     }
   });
-}
 
-// 14. Location Sharing via WhatsApp (with timeout & fallback)
-function shareLocation(btn) {
-  const button = btn || this;
-  const originalText = button.textContent;
+  // =========================================================
+  // LIGHTBOX
+  // =========================================================
+  const galleryItems = $$('.gallery-item');
+  const lightbox = $('#lightbox');
+  const lightboxImg = $('#lightbox-img');
+  const lightboxCaption = $('#lightbox-caption');
+  const lightboxClose = $('#lightbox-close');
+  const lightboxPrev = $('#lightbox-prev');
+  const lightboxNext = $('#lightbox-next');
+  const lightboxTrap = lightbox ? makeFocusTrap(lightbox) : null;
+  let currentIndex = 0;
 
-  if (!("geolocation" in navigator)) {
-    const message = "Hi Prism & Pastry! I'd like to share my location, but my browser doesn't support geolocation. Please guide me on how to share it manually.";
-    window.open(`https://wa.me/254702555093?text=${encodeURIComponent(message)}`, '_blank');
-    return;
+  function updateLightbox() {
+    const item = galleryItems[currentIndex];
+    if (!item) return;
+    if (lightboxImg) {
+      lightboxImg.src = item.dataset.full || item.src;
+      lightboxImg.alt = item.alt || '';
+    }
+    if (lightboxCaption) lightboxCaption.textContent = item.dataset.caption || '';
   }
 
-  button.textContent = '📍 Locating...';
-  button.disabled = true;
-
-  const timeout = setTimeout(() => {
-    button.textContent = originalText;
-    button.disabled = false;
-    const message = "Hi Prism & Pastry! I tried to share my location but it took too long. Please guide me on how to share my live location via WhatsApp.";
-    window.open(`https://wa.me/254702555093?text=${encodeURIComponent(message)}`, '_blank');
-  }, 8000);
-
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      clearTimeout(timeout);
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
-      const mapsLink = `https://maps.google.com/?q=${lat},${lng}`;
-      const message = `Hi Prism & Pastry! My current location is: ${mapsLink}. Please confirm delivery fee.`;
-      window.open(`https://wa.me/254702555093?text=${encodeURIComponent(message)}`, '_blank');
-      button.textContent = originalText;
-      button.disabled = false;
-    },
-    (error) => {
-      clearTimeout(timeout);
-      button.textContent = originalText;
-      button.disabled = false;
-
-      let fallbackMsg;
-      if (error.code === error.PERMISSION_DENIED) {
-        fallbackMsg = "Hi Prism & Pastry! I'd like to share my location, but I need to enable location permissions. Please guide me on how to share it manually.";
-      } else {
-        fallbackMsg = "Hi Prism & Pastry! I couldn't fetch my location. Could you guide me on how to share my live location?";
-      }
-      window.open(`https://wa.me/254702555093?text=${encodeURIComponent(fallbackMsg)}`, '_blank');
-    },
-    { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
-  );
-}
-
-// Attach to all buttons with data-share-location using event delegation
-document.addEventListener('click', (e) => {
-  const locBtn = e.target.closest('[data-share-location]');
-  if (locBtn) {
-    e.preventDefault();
-    shareLocation(locBtn);
-  }
-});
-
-// 15. Close modals on Escape
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    if (tastingOverlay.classList.contains('active')) tastingOverlay.classList.remove('active');
-    if (mpesaOverlay.classList.contains('active')) mpesaOverlay.classList.remove('active');
-    if (lightbox.classList.contains('active')) closeLightbox();
-  }
-});
-
-// 16. Lightbox Logic
-const galleryItems = document.querySelectorAll('.gallery-item');
-const lightbox = document.getElementById('lightbox');
-const lightboxImg = document.getElementById('lightbox-img');
-const lightboxCaption = document.getElementById('lightbox-caption');
-const lightboxClose = document.getElementById('lightbox-close');
-const lightboxPrev = document.getElementById('lightbox-prev');
-const lightboxNext = document.getElementById('lightbox-next');
-let currentIndex = 0;
-const imageArray = Array.from(galleryItems);
-
-function updateLightbox() {
-  const item = imageArray[currentIndex];
-  lightboxImg.src = item.dataset.full;
-  lightboxCaption.textContent = item.dataset.caption;
-}
-
-galleryItems.forEach((item, index) => {
-  item.addEventListener('click', () => {
+  function openLightbox(index) {
+    if (!lightbox || !lightboxTrap) return;
     currentIndex = index;
     updateLightbox();
     lightbox.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    lightboxTrap.activate();
+  }
+
+  function closeLightbox() {
+    if (!lightbox || !lightboxTrap) return;
+    lightbox.classList.remove('active');
+    lightboxTrap.deactivate();
+  }
+
+  galleryItems.forEach((item, i) => {
+    item.addEventListener('click', () => openLightbox(i));
+    item.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openLightbox(i);
+      }
+    });
   });
-  item.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      item.click();
+
+  if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+  if (lightbox) {
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+  }
+  if (lightboxPrev) {
+    lightboxPrev.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
+      updateLightbox();
+    });
+  }
+  if (lightboxNext) {
+    lightboxNext.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % galleryItems.length;
+      updateLightbox();
+    });
+  }
+
+  // =========================================================
+  // GLOBAL KEYBOARD
+  // =========================================================
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (lightbox?.classList.contains('active')) closeLightbox();
+      if (tastingOverlay?.classList.contains('active')) closeTasting();
+      if (mpesaOverlay?.classList.contains('active')) closeMpesa();
+      if (orderOverlay?.classList.contains('active')) closeOrderForm();
+      if (cartDrawer?.classList.contains('active')) closeCartDrawer();
+    }
+    if (lightbox?.classList.contains('active')) {
+      if (e.key === 'ArrowLeft' && lightboxPrev) lightboxPrev.click();
+      if (e.key === 'ArrowRight' && lightboxNext) lightboxNext.click();
     }
   });
-});
 
-function closeLightbox() {
-  lightbox.classList.remove('active');
-  document.body.style.overflow = 'auto';
-}
-
-lightboxClose.addEventListener('click', closeLightbox);
-lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
-lightboxPrev.addEventListener('click', () => {
-  currentIndex = (currentIndex - 1 + imageArray.length) % imageArray.length;
-  updateLightbox();
-});
-lightboxNext.addEventListener('click', () => {
-  currentIndex = (currentIndex + 1) % imageArray.length;
-  updateLightbox();
-});
-document.addEventListener('keydown', (e) => {
-  if (!lightbox.classList.contains('active')) return;
-  if (e.key === 'Escape') closeLightbox();
-  if (e.key === 'ArrowLeft') lightboxPrev.click();
-  if (e.key === 'ArrowRight') lightboxNext.click();
-});
+  // =========================================================
+  // INIT
+  // =========================================================
+  renderCart();
+  updateFulfilmentFields();
+})();
