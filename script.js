@@ -1,10 +1,17 @@
 /* =========================================================
-   PRISM & PASTRY — v3
-   - Cart drawer with localStorage persistence
-   - Order details form with Kenyan phone validation
-   - Focus traps for all modals
-   - aria-live announcements
-   - respects prefers-reduced-motion
+   PRISM & PASTRY — v4
+   Changes in this version (audit fixes):
+   - Replaced AOS with IntersectionObserver (no CDN dependency)
+   - Scoped builder inputs to #builder
+   - Removed dead code (shareLocation, dataset.amount)
+   - Preloader hides on `load` (no artificial delay)
+   - openWhatsApp uses location.href (popup-blocker safe)
+   - Removed fabricated scarcity toasts
+   - M-Pesa success reveals a "Continue on WhatsApp" button
+     instead of auto-navigating (avoids popup blocking)
+   - Extracted describeSpec() to remove duplication
+   - Gallery items are now <button class="gallery-item">
+   - No external AOS dependency
 ========================================================= */
 
 (function () {
@@ -23,9 +30,11 @@
     return `KES ${Number(n).toLocaleString('en-KE')}`;
   }
 
+  // location.href works both inside and outside user-gesture contexts
+  // (unlike window.open, which popup blockers may reject after async delays).
   function openWhatsApp(message) {
     const url = message ? `${WA_BASE}?text=${encodeURIComponent(message)}` : WA_BASE;
-    window.open(url, '_blank', 'noopener');
+    window.location.href = url;
   }
 
   function escapeHtml(s) {
@@ -91,17 +100,33 @@
     };
   }
 
-  // ---------- AOS ----------
-  document.addEventListener('DOMContentLoaded', () => {
-    if (window.AOS) {
-      window.AOS.init({
-        duration: 800,
-        easing: 'ease-in-out',
-        once: true,
-        disable: prefersReducedMotion
-      });
+  // ---------- Reveal-on-scroll (replaces AOS) ----------
+  function initReveal() {
+    const els = $$('[data-aos]');
+    if (!els.length) return;
+
+    // Respect `data-aos-delay`
+    els.forEach((el) => {
+      const delay = el.getAttribute('data-aos-delay');
+      if (delay) el.style.transitionDelay = `${delay}ms`;
+    });
+
+    if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+      els.forEach((el) => el.classList.add('aos-animate'));
+      return;
     }
-  });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('aos-animate');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+
+    els.forEach((el) => io.observe(el));
+  }
 
   // ---------- Preloader ----------
   function hidePreloader() {
@@ -110,11 +135,16 @@
     preloader.classList.add('hidden');
     setTimeout(() => {
       if (preloader.parentNode) preloader.remove();
-      if (window.AOS) window.AOS.refresh();
-    }, 500);
+    }, 400);
   }
-  window.addEventListener('load', () => setTimeout(hidePreloader, 900));
-  setTimeout(hidePreloader, 3000);
+
+  if (document.readyState === 'complete') {
+    hidePreloader();
+  } else {
+    window.addEventListener('load', hidePreloader, { once: true });
+  }
+  // Safety net if `load` never fires (blocked resource, slow 3G, etc.)
+  setTimeout(hidePreloader, 2500);
 
   // ---------- Scroll progress ----------
   const scrollProgress = $('#scroll-progress');
@@ -152,13 +182,11 @@
     });
   }
 
-  // ---------- Header shadow ----------
+  // ---------- Header scroll shadow (class toggle, not inline style) ----------
   const siteHeader = $('#site-header');
   if (siteHeader) {
     window.addEventListener('scroll', () => {
-      siteHeader.style.boxShadow = window.scrollY > 50
-        ? '0 4px 12px rgba(0,0,0,0.1)'
-        : 'none';
+      siteHeader.classList.toggle('is-scrolled', window.scrollY > 50);
     }, { passive: true });
   }
 
@@ -181,7 +209,7 @@
   });
 
   // ---------- WhatsApp link routing ----------
-  $$('.wa-link:not([data-share-location])').forEach((link) => {
+  $$('.wa-link').forEach((link) => {
     link.addEventListener('click', function (e) {
       e.preventDefault();
       const msg = this.dataset.message;
@@ -210,7 +238,7 @@
   const cartDiscountEl = $('#cart-discount');
   const cartTotalEl = $('#cart-total');
   const cartCheckoutBtn = $('#cart-checkout-btn');
-  const cartTrap = makeFocusTrap(cartDrawer);
+  const cartTrap = cartDrawer ? makeFocusTrap(cartDrawer) : null;
 
   function saveCart() {
     try {
@@ -304,7 +332,7 @@
   }
 
   function openCartDrawer() {
-    if (!cartDrawer || !cartBackdrop) return;
+    if (!cartDrawer || !cartBackdrop || !cartTrap) return;
     cartBackdrop.hidden = false;
     requestAnimationFrame(() => {
       cartDrawer.classList.add('active');
@@ -314,7 +342,7 @@
   }
 
   function closeCartDrawer() {
-    if (!cartDrawer || !cartBackdrop) return;
+    if (!cartDrawer || !cartBackdrop || !cartTrap) return;
     cartDrawer.classList.remove('active');
     cartBackdrop.classList.remove('active');
     setTimeout(() => {
@@ -477,7 +505,6 @@
       e.preventDefault();
       let valid = true;
 
-      // Name
       if (!nameInput.value.trim()) {
         setFieldError(nameInput, $('#name-error'), 'Please tell us your name.');
         valid = false;
@@ -485,7 +512,6 @@
         setFieldError(nameInput, $('#name-error'), '');
       }
 
-      // Phone
       if (!phoneInput.value.trim()) {
         setFieldError(phoneInput, $('#phone-error'), 'We need this to confirm your order.');
         valid = false;
@@ -496,7 +522,6 @@
         setFieldError(phoneInput, $('#phone-error'), '');
       }
 
-      // Estate if delivery
       const fulfilmentChecked = document.querySelector('input[name="fulfilment"]:checked');
       const fulfilment = fulfilmentChecked ? fulfilmentChecked.value : 'pickup';
       if (fulfilment === 'delivery' && !estateInput.value.trim()) {
@@ -504,7 +529,6 @@
         valid = false;
       }
 
-      // Date
       if (!dateInput.value) {
         setFieldError(dateInput, $('#date-error'), 'Pick the date you need the cake.');
         valid = false;
@@ -530,8 +554,7 @@
         notes: notesInput.value.trim()
       };
 
-      openWhatsApp(composeOrderMessage(formData, cart));
-
+      const message = composeOrderMessage(formData, cart);
       cart = [];
       saveCart();
       renderCart();
@@ -539,6 +562,7 @@
       orderForm.reset();
       updateFulfilmentFields();
       if (rushWarning) rushWarning.hidden = true;
+      openWhatsApp(message);
     });
   }
 
@@ -556,12 +580,17 @@
   const mpesaLoader = $('#mpesa-loader');
   const mpesaSuccess = $('#mpesa-success');
   const mpesaError = $('#mpesa-error');
-  const mpesaAmountEl = $('.mpesa-amount');
+  const mpesaAmountEl = $('#mpesa-amount');
+  const mpesaContinue = $('#mpesa-continue');
   const mpesaTrap = mpesaOverlay ? makeFocusTrap(mpesaOverlay) : null;
   let mpesaTimeout = null;
+  let mpesaPendingMessage = '';
 
-  function triggerMpesaPayment(amount) {
+  // Kept for future wiring (e.g. a "Reserve with 50% deposit" button).
+  // Not currently triggered from any visible UI element on this page.
+  function triggerMpesaPayment(amount, pendingMessage) {
     if (!mpesaOverlay) return;
+    mpesaPendingMessage = pendingMessage || '';
     if (mpesaAmountEl) mpesaAmountEl.textContent = `${kes(amount)}.00`;
     mpesaOverlay.classList.add('active');
     if (mpesaLoader) mpesaLoader.classList.remove('hidden');
@@ -572,10 +601,8 @@
     mpesaTimeout = setTimeout(() => {
       if (mpesaLoader) mpesaLoader.classList.add('hidden');
       if (mpesaSuccess) mpesaSuccess.classList.remove('hidden');
-      setTimeout(() => {
-        closeMpesa();
-        openWhatsApp(`Hi! I just completed a ${kes(amount)} demo payment. Please confirm my order.`);
-      }, 1800);
+      // No auto-navigation here: user clicks "Continue on WhatsApp"
+      // below, which is synchronous and therefore not popup-blocked.
     }, 2200);
   }
 
@@ -587,6 +614,15 @@
   }
 
   if ($('#mpesa-close')) $('#mpesa-close').addEventListener('click', closeMpesa);
+
+  if (mpesaContinue) {
+    mpesaContinue.addEventListener('click', () => {
+      const msg = mpesaPendingMessage ||
+        'Hi! I just completed a demo payment. Please confirm my order.';
+      closeMpesa();
+      openWhatsApp(msg);
+    });
+  }
 
   if ($('#mpesa-cancel')) {
     $('#mpesa-cancel').addEventListener('click', () => {
@@ -604,13 +640,8 @@
     });
   }
 
-  const payDepositLink = $('#pay-deposit-demo');
-  if (payDepositLink) {
-    payDepositLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      triggerMpesaPayment(2250);
-    });
-  }
+  // Expose for future wiring (e.g. via DevTools or a real deposit CTA).
+  window.__pp_triggerMpesaDemo = triggerMpesaPayment;
 
   // =========================================================
   // BUNDLE → CART
@@ -625,7 +656,7 @@
       .filter((i) => i.classList.contains('selected'))
       .map((i) => ({
         id: i.dataset.id,
-        title: ($('h4', i)?.textContent || '').trim(),
+        title: ($('h3', i)?.textContent || '').trim(),
         price: parseInt(i.dataset.price, 10) || 0
       }));
   }
@@ -696,7 +727,9 @@
   // =========================================================
   // CAKE BUILDER
   // =========================================================
-  const builderInputs = $$('input[type="radio"]');
+  // Strictly scope to the builder — never select radios from the order form.
+  const builderRoot = $('#builder');
+  const builderInputs = builderRoot ? $$('input[type="radio"]', builderRoot) : [];
   const builderTotalEl = $('#builder-total');
   const builderCheckoutBtn = $('#builder-checkout-btn');
   const builderResetBtn = $('#builder-reset-btn');
@@ -738,6 +771,18 @@
     builderTotalEl.classList.remove('update');
     void builderTotalEl.offsetWidth;
     builderTotalEl.classList.add('update');
+  }
+
+  // Single source of truth for the human-readable spec line.
+  function describeSpec(selected) {
+    const parts = [];
+    if (selected.flavor) parts.push(selected.flavor.label);
+    if (selected.size) parts.push(selected.size.label);
+    if (selected.theme) parts.push(selected.theme.label);
+    if (selected.filling && selected.filling.value !== '0') parts.push(selected.filling.label);
+    if (selected.topper && selected.topper.value !== '0') parts.push(selected.topper.label);
+    if (selected.addon && selected.addon.value !== '0') parts.push(selected.addon.label);
+    return parts.join(' · ');
   }
 
   function updateCakePreview(selected) {
@@ -782,19 +827,13 @@
 
     if (builderTotalEl) builderTotalEl.textContent = kes(total);
     if (builderCheckoutBtn) {
-      builderCheckoutBtn.dataset.amount = String(total);
       builderCheckoutBtn.textContent = `Add to Cart — ${kes(total)}`;
     }
     animatePrice();
 
-    const parts = [];
-    if (selected.flavor) parts.push(selected.flavor.label);
-    if (selected.size) parts.push(selected.size.label);
-    if (selected.theme) parts.push(selected.theme.label);
-    if (selected.filling && selected.filling.value !== '0') parts.push(selected.filling.label);
-    if (selected.topper && selected.topper.value !== '0') parts.push(selected.topper.label);
-    if (selected.addon && selected.addon.value !== '0') parts.push(selected.addon.label);
-    if (summarySelections) summarySelections.innerHTML = `<p>${parts.join(' · ')}</p>`;
+    if (summarySelections) {
+      summarySelections.innerHTML = `<p>${describeSpec(selected)}</p>`;
+    }
 
     updateCakePreview(selected);
     return { selected, total };
@@ -851,13 +890,6 @@
   if (builderCheckoutBtn) {
     builderCheckoutBtn.addEventListener('click', () => {
       const { selected, total } = calculateBuilderTotal();
-      const detailParts = [];
-      if (selected.flavor) detailParts.push(selected.flavor.label);
-      if (selected.size) detailParts.push(selected.size.label);
-      if (selected.theme) detailParts.push(selected.theme.label);
-      if (selected.filling && selected.filling.value !== '0') detailParts.push(selected.filling.label);
-      if (selected.topper && selected.topper.value !== '0') detailParts.push(selected.topper.label);
-      if (selected.addon && selected.addon.value !== '0') detailParts.push(selected.addon.label);
 
       const specKey = JSON.stringify(
         Object.fromEntries(Object.entries(selected).map(([k, v]) => [k, v.value]))
@@ -867,7 +899,7 @@
         id: `custom-${hashString(specKey)}`,
         type: 'custom',
         title: 'Custom Cake',
-        detail: detailParts.join(' · '),
+        detail: describeSpec(selected),
         price: total,
         qty: 1
       });
@@ -876,41 +908,6 @@
 
   calculateBuilderTotal();
   updateRadioCardClasses();
-
-  // =========================================================
-  // SCARCITY NOTICES
-  // =========================================================
-  const toastContainer = $('#purchase-toast-container');
-  const scarcityMessages = [
-    { headline: '5 of 12 custom slots left this weekend.', sub: 'Book by Thursday to lock a Saturday delivery.' },
-    { headline: 'Saturday delivery is 80% booked.', sub: 'We cap weekends at 12 cakes to stay on time.' },
-    { headline: 'Ready cakes for Saturday pickup: 3 left.', sub: 'Red velvet already sold out.' }
-  ];
-
-  function showScarcityNotice() {
-    if (!toastContainer) return;
-    const msg = scarcityMessages[Math.floor(Math.random() * scarcityMessages.length)];
-    const toast = document.createElement('div');
-    toast.className = 'scarcity-toast';
-    toast.setAttribute('role', 'status');
-    toast.innerHTML = `
-      <div class="scarcity-icon" aria-hidden="true">⏱</div>
-      <div class="scarcity-content">
-        <p><strong>${escapeHtml(msg.headline)}</strong></p>
-        <span class="scarcity-sub">${escapeHtml(msg.sub)}</span>
-      </div>
-      <button type="button" class="toast-close" aria-label="Dismiss">×</button>`;
-    toastContainer.appendChild(toast);
-
-    const removeToast = () => { if (toast.parentNode) toast.remove(); };
-    setTimeout(removeToast, 8000);
-    $('.toast-close', toast).addEventListener('click', removeToast);
-  }
-
-  if (!prefersReducedMotion) {
-    setTimeout(showScarcityNotice, 6000);
-    setInterval(showScarcityNotice, 45000);
-  }
 
   // =========================================================
   // TASTING MODAL
@@ -994,60 +991,14 @@
         if (tastingError) tastingError.classList.add('visible');
         return;
       }
-      openWhatsApp(`Hi Prism & Pastry! I'd like to book a FREE tasting session at your Imara Daima studio on ${selectedDate} at ${selectedTime}. Is this slot available?`);
+      const msg = `Hi Prism & Pastry! I'd like to book a FREE tasting session at your Imara Daima studio on ${selectedDate} at ${selectedTime}. Is this slot available?`;
       closeTasting();
+      openWhatsApp(msg);
     });
   }
 
   // =========================================================
-  // LOCATION SHARING
-  // =========================================================
-  function shareLocation(btn) {
-    const original = btn.textContent;
-    if (!('geolocation' in navigator)) {
-      openWhatsApp("Hi! I'd like to share my location but my browser doesn't support geolocation. Can you guide me?");
-      return;
-    }
-    btn.textContent = '📍 Locating...';
-    btn.disabled = true;
-
-    const timer = setTimeout(() => {
-      btn.textContent = original;
-      btn.disabled = false;
-      openWhatsApp('Hi! I tried to share my location but it took too long. Can you guide me?');
-    }, 8000);
-
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        clearTimeout(timer);
-        const link = `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
-        openWhatsApp(`Hi! My current location is: ${link}. Please confirm delivery fee.`);
-        btn.textContent = original;
-        btn.disabled = false;
-      },
-      (err) => {
-        clearTimeout(timer);
-        btn.textContent = original;
-        btn.disabled = false;
-        const msg = err.code === err.PERMISSION_DENIED
-          ? "Hi! I'd like to share my location but need to enable permissions. Can you guide me?"
-          : "Hi! I couldn't fetch my location. Can you guide me?";
-        openWhatsApp(msg);
-      },
-      { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
-    );
-  }
-
-  document.addEventListener('click', (e) => {
-    const b = e.target.closest('[data-share-location]');
-    if (b) {
-      e.preventDefault();
-      shareLocation(b);
-    }
-  });
-
-  // =========================================================
-  // LIGHTBOX
+  // LIGHTBOX  (gallery items are now <button class="gallery-item">)
   // =========================================================
   const galleryItems = $$('.gallery-item');
   const lightbox = $('#lightbox');
@@ -1062,9 +1013,10 @@
   function updateLightbox() {
     const item = galleryItems[currentIndex];
     if (!item) return;
-    if (lightboxImg) {
-      lightboxImg.src = item.dataset.full || item.src;
-      lightboxImg.alt = item.alt || '';
+    const img = item.querySelector('img');
+    if (lightboxImg && img) {
+      lightboxImg.src = item.dataset.full || img.src;
+      lightboxImg.alt = img.alt || '';
     }
     if (lightboxCaption) lightboxCaption.textContent = item.dataset.caption || '';
   }
@@ -1085,12 +1037,6 @@
 
   galleryItems.forEach((item, i) => {
     item.addEventListener('click', () => openLightbox(i));
-    item.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        openLightbox(i);
-      }
-    });
   });
 
   if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
@@ -1132,6 +1078,7 @@
   // =========================================================
   // INIT
   // =========================================================
+  initReveal();
   renderCart();
   updateFulfilmentFields();
 })();

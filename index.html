@@ -1,21 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-KE">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1a1a1a">
     <title>Prism &amp; Pastry | On-Time Geometric Cakes in Nairobi</title>
-    <meta name="description" content="Hand-decorated geometric cakes, baked fresh the morning of your event. Delivered on time across Nairobi, Kiambu & Machakos — or the cake is free. From KES 3,000. Pickup in Imara Daima.">
+    <meta name="description" content="Hand-decorated geometric cakes, baked fresh the morning of your event. Delivered on time across Nairobi, Kiambu & Machakos — or the cake is free. From KES 3,000.">
     <meta name="keywords" content="cakes Nairobi, geometric cakes, custom cakes Kenya, bakery Imara Daima, birthday cakes Nairobi, Prism and Pastry">
     <meta name="author" content="Prism & Pastry">
     <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://prismandpastry.co.ke/">
 
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Prism & Pastry">
+    <meta property="og:locale" content="en_KE">
     <meta property="og:title" content="Prism & Pastry | Your Cake Arrives On Time — Or It's Free">
     <meta property="og:description" content="Hand-decorated geometric cakes, baked fresh the morning of your event. From KES 3,000. Pickup in Imara Daima, delivery across Nairobi, Kiambu & Machakos.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1200&auto=format&fit=crop">
-    <meta property="og:url" content="https://prismandpastry.co.ke">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1200&h=630&auto=format&fit=crop">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://prismandpastry.co.ke/">
+
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Prism & Pastry | Your Cake Arrives On Time — Or It's Free">
+    <meta name="twitter:description" content="Hand-decorated geometric cakes, baked fresh the morning of your event. From KES 3,000.">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1200&h=630&auto=format&fit=crop">
 
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%82%3C/text%3E%3C/svg%3E">
 
@@ -83,9 +92,21 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Clash Display is served by Fontshare, not Google Fonts -->
+    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+
+    <noscript>
+        <style>
+            /* If JS is disabled, reveal every animated section immediately. */
+            [data-aos] { opacity: 1 !important; transform: none !important; }
+        </style>
+    </noscript>
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -114,6 +135,11 @@
             </ul>
 
             <div class="nav-actions">
+                <a href="tel:+254702555093" class="phone-link" aria-label="Call Prism and Pastry">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <span class="phone-link-text">Call</span>
+                </a>
+
                 <button type="button" class="cart-button" id="cart-button" aria-label="Open cart, 0 items" aria-haspopup="dialog">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
                     <span class="cart-count is-empty" id="cart-count" aria-live="polite" aria-atomic="true">0</span>
@@ -153,6 +179,7 @@
                     sizes="(max-width: 1024px) 100vw, 45vw"
                     width="1200" height="900"
                     fetchpriority="high"
+                    decoding="async"
                     alt="Chocolate drip cake with berries, hand-decorated in a geometric style"
                 />
                 <div class="hero-badge">4.8★ · 63 Google reviews</div>
@@ -160,7 +187,8 @@
         </section>
 
         <!-- RISK-REVERSAL BAR -->
-        <section class="trust-bar" data-aos="fade-up" data-aos-delay="100">
+        <section class="trust-bar" data-aos="fade-up" data-aos-delay="100" aria-labelledby="trust-heading">
+            <h2 id="trust-heading" class="sr-only">Our promises to you</h2>
             <div class="trust-item">
                 <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                 <h3>On Time or It's Free</h3>
@@ -317,9 +345,9 @@
         </section>
 
         <!-- UPSELL -->
-        <section class="upsell-section" data-aos="fade-up">
+        <section class="upsell-section" data-aos="fade-up" aria-labelledby="upsell-heading">
             <div class="upsell-heading">
-                <h2>Add to your order — save 10%</h2>
+                <h2 id="upsell-heading">Add to your order — save 10%</h2>
                 <p>Ordered together, these come 10% cheaper. The discount shows in your total below.</p>
             </div>
 
@@ -327,17 +355,17 @@
                 <div class="bundle-item selected" data-id="cake-geometric" data-price="4500" tabindex="0" role="button" aria-pressed="true" aria-label="Main Geometric Cake, KES 4,500">
                     <div class="bundle-checkbox" aria-hidden="true">✓</div>
                     <img src="https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=400&auto=format&fit=crop" alt="Chocolate geometric cake" class="bundle-img" loading="lazy" width="200" height="200">
-                    <div class="bundle-info"><h4>Main Geometric Cake</h4><p class="bundle-price">KES 4,500</p></div>
+                    <div class="bundle-info"><h3>Main Geometric Cake</h3><p class="bundle-price">KES 4,500</p></div>
                 </div>
                 <div class="bundle-item" data-id="cupcakes-6" data-price="800" tabindex="0" role="button" aria-pressed="false" aria-label="6 Gourmet Cupcakes, KES 800">
                     <div class="bundle-checkbox" aria-hidden="true">+</div>
                     <img src="https://images.unsplash.com/photo-1426869884541-df7117556757?q=80&w=400&auto=format&fit=crop" alt="Six gourmet cupcakes" class="bundle-img" loading="lazy" width="200" height="200">
-                    <div class="bundle-info"><h4>6 Gourmet Cupcakes</h4><p class="bundle-price">KES 800</p></div>
+                    <div class="bundle-info"><h3>6 Gourmet Cupcakes</h3><p class="bundle-price">KES 800</p></div>
                 </div>
                 <div class="bundle-item" data-id="topper-custom" data-price="350" tabindex="0" role="button" aria-pressed="false" aria-label="Custom Cake Topper, KES 350">
                     <div class="bundle-checkbox" aria-hidden="true">+</div>
                     <img src="https://images.unsplash.com/photo-1574085733277-851d9d856a3a?q=80&w=400&auto=format&fit=crop" alt="Custom cake topper" class="bundle-img" loading="lazy" width="200" height="200">
-                    <div class="bundle-info"><h4>Custom Cake Topper</h4><p class="bundle-price">KES 350</p></div>
+                    <div class="bundle-info"><h3>Custom Cake Topper</h3><p class="bundle-price">KES 350</p></div>
                 </div>
             </div>
 
@@ -377,12 +405,24 @@
                 <p>Tap any cake to see it full-size. Every one of these was designed with a customer on WhatsApp first.</p>
             </div>
             <div class="gallery-grid" id="gallery-grid">
-                <img src="https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=480&auto=format&fit=crop 480w, https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=768&auto=format&fit=crop 768w, https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=1200&auto=format&fit=crop 1200w" sizes="(max-width: 800px) 100vw, 33vw" width="1200" height="800" loading="lazy" decoding="async" data-full="https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=1600&auto=format&fit=crop" data-caption="The Plum Prism" class="gallery-item" alt="Geometric cake with plum and cream finish" tabindex="0" role="button" aria-label="View The Plum Prism">
-                <img src="https://images.unsplash.com/photo-1569864358642-9d1684040f43?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1569864358642-9d1684040f43?q=80&w=480&auto=format&fit=crop 480w, https://images.unsplash.com/photo-1569864358642-9d1684040f43?q=80&w=768&auto=format&fit=crop 768w, https://images.unsplash.com/photo-1569864358642-9d1684040f43?q=80&w=1200&auto=format&fit=crop 1200w" sizes="(max-width: 800px) 100vw, 33vw" width="1200" height="800" loading="lazy" decoding="async" data-full="https://images.unsplash.com/photo-1569864358642-9d1684040f43?q=80&w=1600&auto=format&fit=crop" data-caption="Mango Macarons" class="gallery-item" alt="Mango macarons" tabindex="0" role="button" aria-label="View Mango Macarons">
-                <img src="https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=480&auto=format&fit=crop 480w, https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=768&auto=format&fit=crop 768w, https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=1200&auto=format&fit=crop 1200w" sizes="(max-width: 800px) 100vw, 33vw" width="1200" height="800" loading="lazy" decoding="async" data-full="https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=1600&auto=format&fit=crop" data-caption="Street Art Delight" class="gallery-item" alt="Decorated cupcakes with street art styling" tabindex="0" role="button" aria-label="View Street Art Delight">
-                <img src="https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=480&auto=format&fit=crop 480w, https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=768&auto=format&fit=crop 768w, https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=1200&auto=format&fit=crop 1200w" sizes="(max-width: 800px) 100vw, 33vw" width="1200" height="800" loading="lazy" decoding="async" data-full="https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=1600&auto=format&fit=crop" data-caption="Emerald Cube" class="gallery-item" alt="Chocolate cube cake" tabindex="0" role="button" aria-label="View Emerald Cube">
-                <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=480&auto=format&fit=crop 480w, https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=768&auto=format&fit=crop 768w, https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=1200&auto=format&fit=crop 1200w" sizes="(max-width: 800px) 100vw, 33vw" width="1200" height="800" loading="lazy" decoding="async" data-full="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=1600&auto=format&fit=crop" data-caption="Coral Cascade" class="gallery-item" alt="Coral glazed donuts" tabindex="0" role="button" aria-label="View Coral Cascade">
-                <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=480&auto=format&fit=crop 480w, https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=768&auto=format&fit=crop 768w, https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1200&auto=format&fit=crop 1200w" sizes="(max-width: 800px) 100vw, 33vw" width="1200" height="800" loading="lazy" decoding="async" data-full="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1600&auto=format&fit=crop" data-caption="Prism Royale" class="gallery-item" alt="Pastries on a marble slab" tabindex="0" role="button" aria-label="View Prism Royale">
+                <button type="button" class="gallery-item" data-full="https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=1600&auto=format&fit=crop" data-caption="The Plum Prism" aria-label="View The Plum Prism">
+                    <img src="https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=480&auto=format&fit=crop 480w, https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=768&auto=format&fit=crop 768w, https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=1200&auto=format&fit=crop 1200w" sizes="(max-width: 800px) 100vw, 33vw" width="1200" height="800" loading="lazy" decoding="async" alt="Geometric cake with plum and cream finish">
+                </button>
+                <button type="button" class="gallery-item" data-full="https://images.unsplash.com/photo-1569864358642-9d1684040f43?q=80&w=1600&auto=format&fit=crop" data-caption="Mango Macarons" aria-label="View Mango Macarons">
+                    <img src="https://images.unsplash.com/photo-1569864358642-9d1684040f43?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1569864358642-9d1684040f43?q=80&w=480&auto=format&fit=crop 480w, https://images.unsplash.com/photo-1569864358642-9d1684040f43?q=80&w=768&auto=format&fit=crop 768w, https://images.unsplash.com/photo-1569864358642-9d1684040f43?q=80&w=1200&auto=format&fit=crop 1200w" sizes="(max-width: 800px) 100vw, 33vw" width="1200" height="800" loading="lazy" decoding="async" alt="Mango macarons">
+                </button>
+                <button type="button" class="gallery-item" data-full="https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=1600&auto=format&fit=crop" data-caption="Street Art Delight" aria-label="View Street Art Delight">
+                    <img src="https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=480&auto=format&fit=crop 480w, https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=768&auto=format&fit=crop 768w, https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=1200&auto=format&fit=crop 1200w" sizes="(max-width: 800px) 100vw, 33vw" width="1200" height="800" loading="lazy" decoding="async" alt="Decorated cupcakes with street art styling">
+                </button>
+                <button type="button" class="gallery-item" data-full="https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=1600&auto=format&fit=crop" data-caption="Emerald Cube" aria-label="View Emerald Cube">
+                    <img src="https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=480&auto=format&fit=crop 480w, https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=768&auto=format&fit=crop 768w, https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=1200&auto=format&fit=crop 1200w" sizes="(max-width: 800px) 100vw, 33vw" width="1200" height="800" loading="lazy" decoding="async" alt="Chocolate cube cake">
+                </button>
+                <button type="button" class="gallery-item" data-full="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=1600&auto=format&fit=crop" data-caption="Coral Cascade" aria-label="View Coral Cascade">
+                    <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=480&auto=format&fit=crop 480w, https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=768&auto=format&fit=crop 768w, https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=1200&auto=format&fit=crop 1200w" sizes="(max-width: 800px) 100vw, 33vw" width="1200" height="800" loading="lazy" decoding="async" alt="Coral glazed donuts">
+                </button>
+                <button type="button" class="gallery-item" data-full="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1600&auto=format&fit=crop" data-caption="Prism Royale" aria-label="View Prism Royale">
+                    <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1200&auto=format&fit=crop" srcset="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=480&auto=format&fit=crop 480w, https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=768&auto=format&fit=crop 768w, https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1200&auto=format&fit=crop 1200w" sizes="(max-width: 800px) 100vw, 33vw" width="1200" height="800" loading="lazy" decoding="async" alt="Pastries on a marble slab">
+                </button>
             </div>
         </section>
 
@@ -479,7 +519,8 @@
         </section>
 
         <!-- FINAL CTA -->
-        <section class="final-cta" id="visit" data-aos="fade-up">
+        <section class="final-cta" id="visit" data-aos="fade-up" aria-labelledby="visit-heading">
+            <h2 id="visit-heading" class="sr-only">Visit us or book your cake</h2>
             <div class="visit-block">
                 <h3>Try before you commit.</h3>
                 <p>Free tasting sessions at our Imara Daima studio. Meet the pastry chef, sample every flavour, then decide.</p>
@@ -489,7 +530,6 @@
                 <h3>We cap custom orders at 12 a week.</h3>
                 <p>Saturdays book out 5 days ahead. Message us with your date and we'll tell you today if we can take it.</p>
                 <a href="https://wa.me/254702555093?text=Hi!%20I%20need%20a%20cake%20for%20%5Bdate%5D%20for%20%5Bnumber%5D%20people.%20Can%20you%20help%3F" class="cta-btn primary" target="_blank" rel="noopener">Order on WhatsApp — 15-min reply</a>
-                <p class="demo-link"><a href="#" id="pay-deposit-demo">Already confirmed? Pay your 50% deposit (demo)</a></p>
             </div>
         </section>
     </main>
@@ -520,22 +560,28 @@
             </div>
             <div class="footer-social">
                 <h4>Follow Us</h4>
-                <a href="#" aria-label="Instagram" class="social-icon">📸</a>
-                <a href="#" aria-label="Facebook" class="social-icon">👍</a>
-                <a href="#" aria-label="TikTok" class="social-icon">🎵</a>
+                <a href="https://instagram.com/prismandpastry" aria-label="Instagram" class="social-icon" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.22.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.05.41 2.22.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.22a3.7 3.7 0 0 1-.9 1.38 3.7 3.7 0 0 1-1.38.9c-.42.16-1.05.36-2.22.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.22-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.05-.41-2.22-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.22.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.05-.36 2.22-.41C8.42 2.17 8.8 2.16 12 2.16Zm0 1.8c-3.14 0-3.52.01-4.76.07-1.15.05-1.77.24-2.19.4-.55.21-.94.47-1.35.88-.41.41-.67.8-.88 1.35-.16.42-.35 1.04-.4 2.19-.06 1.24-.07 1.62-.07 4.76s.01 3.52.07 4.76c.05 1.15.24 1.77.4 2.19.21.55.47.94.88 1.35.41.41.8.67 1.35.88.42.16 1.04.35 2.19.4 1.24.06 1.62.07 4.76.07s3.52-.01 4.76-.07c1.15-.05 1.77-.24 2.19-.4a3.6 3.6 0 0 0 1.35-.88c.41-.41.67-.8.88-1.35.16-.42.35-1.04.4-2.19.06-1.24.07-1.62.07-4.76s-.01-3.52-.07-4.76c-.05-1.15-.24-1.77-.4-2.19a3.6 3.6 0 0 0-.88-1.35 3.6 3.6 0 0 0-1.35-.88c-.42-.16-1.04-.35-2.19-.4-1.24-.06-1.62-.07-4.76-.07Zm0 3.06a5.14 5.14 0 1 1 0 10.28 5.14 5.14 0 0 1 0-10.28Zm0 8.47a3.33 3.33 0 1 0 0-6.66 3.33 3.33 0 0 0 0 6.66Zm6.54-8.68a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0Z"/></svg>
+                </a>
+                <a href="https://facebook.com/prismandpastry" aria-label="Facebook" class="social-icon" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.77l-.44 2.89h-2.33v6.99A10 10 0 0 0 22 12Z"/></svg>
+                </a>
+                <a href="https://tiktok.com/@prismandpastry" aria-label="TikTok" class="social-icon" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true"><path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5 2.59 2.59 0 0 1 0-5.18c.27 0 .53.04.78.12V9.66a5.76 5.76 0 0 0-.78-.06 5.72 5.72 0 1 0 5.72 5.72V9.01a7.35 7.35 0 0 0 4.29 1.38V7.3a4.29 4.29 0 0 1-3.27-1.48Z"/></svg>
+                </a>
             </div>
         </div>
         <p class="copyright">&copy; 2026 Prism &amp; Pastry · Demo project</p>
     </footer>
 
     <a href="https://wa.me/254702555093" class="floating-wa" aria-label="Chat on WhatsApp" target="_blank" rel="noopener">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="" loading="lazy" width="32" height="32">
+        <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false" fill="currentColor">
+            <path d="M16.002 2.667C8.638 2.667 2.667 8.638 2.667 16c0 2.36.626 4.667 1.816 6.7L2.75 29.25l6.733-1.767A13.24 13.24 0 0 0 16 29.333c7.363 0 13.334-5.97 13.334-13.333S23.365 2.667 16.002 2.667Zm0 24A10.6 10.6 0 0 1 10.5 25.1l-.375-.223-4 1.05 1.067-3.9-.245-.4A10.62 10.62 0 0 1 5.334 16c0-5.883 4.785-10.667 10.668-10.667S26.668 10.117 26.668 16 21.885 26.667 16.002 26.667Zm5.85-8.02c-.32-.16-1.893-.933-2.187-1.04-.293-.107-.507-.16-.72.16-.213.32-.826 1.04-1.013 1.253-.187.213-.373.24-.693.08-.32-.16-1.35-.497-2.573-1.587-.95-.847-1.59-1.893-1.777-2.213-.187-.32-.02-.493.14-.653.16-.16.36-.413.54-.62.18-.213.24-.36.36-.6.12-.24.06-.453-.03-.633-.08-.187-.72-1.747-.987-2.387-.26-.627-.52-.54-.72-.553-.187-.008-.4-.008-.613-.008a1.18 1.18 0 0 0-.853.4c-.293.32-1.12 1.093-1.12 2.667s1.147 3.093 1.307 3.307c.16.213 2.253 3.44 5.467 4.827.764.327 1.36.52 1.827.667.766.24 1.466.207 2.02.127.62-.093 1.893-.773 2.16-1.52.266-.747.266-1.387.187-1.52-.08-.14-.293-.213-.613-.373Z"/>
+        </svg>
     </a>
 
-    <div id="purchase-toast-container" aria-live="polite" aria-atomic="false"></div>
-
     <!-- CART DRAWER -->
-    <div class="drawer-backdrop" id="cart-backdrop" hidden></div>
+    <div class="drawer-backdrop" id="cart-backdrop" hidden aria-hidden="true"></div>
     <aside id="cart-drawer" class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true">
         <header class="cart-header">
             <h2 id="cart-title">Your order</h2>
@@ -616,9 +662,14 @@
             <div class="mpesa-body">
                 <h3 id="mpesa-title">Enter M-PESA PIN to pay</h3>
                 <p class="mpesa-details">Prism &amp; Pastry (DEMO)</p>
-                <p class="mpesa-amount">KES 5,500.00</p>
+                <p class="mpesa-amount" id="mpesa-amount">KES 0.00</p>
                 <div id="mpesa-loader" class="mpesa-loader"><div class="pulse-ring"></div><p>Checking your phone...</p></div>
-                <div id="mpesa-success" class="mpesa-success hidden"><div class="checkmark-circle"><div class="checkmark draw"></div></div><h3>Payment Successful!</h3><p>Asante! Your order is confirmed.</p></div>
+                <div id="mpesa-success" class="mpesa-success hidden">
+                    <div class="checkmark-circle"><div class="checkmark draw"></div></div>
+                    <h3>Payment Successful!</h3>
+                    <p>Asante! Your order is confirmed.</p>
+                    <button type="button" id="mpesa-continue" class="cta-btn primary">Continue on WhatsApp</button>
+                </div>
                 <div id="mpesa-error" class="mpesa-success hidden"><div class="error-circle">!</div><h3>Transaction Cancelled</h3><p>You have not been charged.</p></div>
             </div>
             <button type="button" id="mpesa-cancel" class="mpesa-cancel">Cancel Transaction</button>
@@ -656,7 +707,6 @@
         <button type="button" class="lightbox-next" id="lightbox-next" aria-label="Next image">&#10095;</button>
     </div>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
     <script src="script.js" defer></script>
 </body>
 </html>
